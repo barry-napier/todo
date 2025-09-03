@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Container } from '@/components/layout/Container';
 import { Header } from '@/components/layout/Header';
@@ -6,8 +6,56 @@ import { TodoItem } from '@/components/todo/TodoItem';
 import { AddTodo } from '@/components/todo/AddTodo';
 import { TodoActions } from '@/components/todo/TodoActions';
 import { Todo } from '@/types/todo';
+import { ThemeProvider } from '@/lib/contexts/ThemeContext';
+
+// Mock matchMedia and localStorage
+const matchMediaMock = vi.fn(() => ({
+  matches: false,
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+}));
+
+const localStorageMock = (() => {
+  let store: { [key: string]: string } = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+  };
+})();
 
 describe('Responsive Design', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      value: matchMediaMock,
+      writable: true,
+    });
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+
+    // Only define setAttribute if it doesn't already exist or redefine safely
+    const originalSetAttribute = document.documentElement.setAttribute;
+    if (originalSetAttribute !== vi.fn()) {
+      Object.defineProperty(document.documentElement, 'setAttribute', {
+        value: vi.fn(),
+        writable: true,
+        configurable: true,
+      });
+    }
+
+    vi.clearAllMocks();
+  });
+
+  const renderWithTheme = (component: React.ReactNode) => {
+    return render(<ThemeProvider>{component}</ThemeProvider>);
+  };
+
   // Mock functions
   const mockOnToggle = vi.fn();
   const mockOnDelete = vi.fn();
@@ -62,7 +110,7 @@ describe('Responsive Design', () => {
 
   describe('Header Component', () => {
     it('should have responsive text sizes', () => {
-      render(<Header />);
+      renderWithTheme(<Header />);
       const heading = screen.getByText('Todo App');
       expect(heading).toHaveClass('text-lg');
       expect(heading).toHaveClass('sm:text-xl');
@@ -70,7 +118,7 @@ describe('Responsive Design', () => {
     });
 
     it('should have responsive height', () => {
-      const { container } = render(<Header />);
+      const { container } = renderWithTheme(<Header />);
       const headerContent = container.querySelector('div.mx-auto');
       expect(headerContent).toHaveClass('h-14');
       expect(headerContent).toHaveClass('sm:h-16');
