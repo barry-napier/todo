@@ -222,6 +222,8 @@ describe('TodoItem', () => {
 
   it('should call onDelete with animation when delete button is clicked', async () => {
     const user = userEvent.setup();
+    // Mock window.confirm to return true
+    vi.spyOn(window, 'confirm').mockImplementation(() => true);
 
     const { container } = render(
       <TodoItem
@@ -234,6 +236,9 @@ describe('TodoItem', () => {
 
     const deleteButton = screen.getByLabelText('Delete "Test todo"');
     await user.click(deleteButton);
+
+    // Check that confirmation was shown
+    expect(window.confirm).toHaveBeenCalledWith('Delete "Test todo"?');
 
     const card = container.querySelector('.animate-slide-out');
     expect(card).toBeInTheDocument();

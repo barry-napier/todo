@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft
+Ready for Review
 
 ## Story
 
@@ -20,42 +20,42 @@ Draft
 
 ## Tasks / Subtasks
 
-- [ ] Add delete button to TodoItem (AC: 1, 2)
-  - [ ] Create TodoActions component for action buttons
-  - [ ] Add delete icon button with Trash icon
-  - [ ] Show on hover for desktop
-  - [ ] Always visible on mobile/touch devices
-- [ ] Implement delete functionality (AC: 1)
-  - [ ] Add deleteTodo method to useTodos hook
-  - [ ] Remove todo from state array
-  - [ ] Update localStorage immediately
-  - [ ] Handle optimistic updates
-- [ ] Add delete confirmation (AC: 3)
-  - [ ] Create simple confirmation dialog (optional for MVP)
-  - [ ] Use native confirm() for simplicity
+- [x] Add delete button to TodoItem (AC: 1, 2)
+  - [x] Create TodoActions component for action buttons
+  - [x] Add delete icon button with Trash icon
+  - [x] Show on hover for desktop
+  - [x] Always visible on mobile/touch devices
+- [x] Implement delete functionality (AC: 1)
+  - [x] Add deleteTodo method to useTodos hook
+  - [x] Remove todo from state array
+  - [x] Update localStorage immediately
+  - [x] Handle optimistic updates
+- [x] Add delete confirmation (AC: 3)
+  - [x] Create simple confirmation dialog (optional for MVP)
+  - [x] Use native confirm() for simplicity
   - [ ] Store preference in localStorage (future)
-- [ ] Implement removal animation (AC: 4)
-  - [ ] Add fade-out animation on delete
-  - [ ] Slide up remaining todos smoothly
-  - [ ] Use CSS transitions for performance
-  - [ ] Duration: 200-300ms
-- [ ] Error handling (AC: 1)
-  - [ ] Handle deletion failures gracefully
-  - [ ] Show error message if delete fails
-  - [ ] Rollback optimistic update on error
-- [ ] Accessibility features (AC: 1, 2)
-  - [ ] ARIA label: "Delete todo: [todo text]"
-  - [ ] Keyboard accessible (Tab navigation)
-  - [ ] Announce deletion to screen readers
-- [ ] Style delete button (AC: 1, 2)
-  - [ ] Use destructive variant styling
-  - [ ] Red color on hover
-  - [ ] Proper spacing from other actions
-- [ ] Write unit tests (AC: 1-4)
-  - [ ] Test delete button renders
-  - [ ] Test delete functionality
-  - [ ] Test confirmation flow
-  - [ ] Test animation classes applied
+- [x] Implement removal animation (AC: 4)
+  - [x] Add fade-out animation on delete
+  - [x] Slide up remaining todos smoothly
+  - [x] Use CSS transitions for performance
+  - [x] Duration: 200-300ms
+- [x] Error handling (AC: 1)
+  - [x] Handle deletion failures gracefully
+  - [x] Show error message if delete fails
+  - [x] Rollback optimistic update on error
+- [x] Accessibility features (AC: 1, 2)
+  - [x] ARIA label: "Delete todo: [todo text]"
+  - [x] Keyboard accessible (Tab navigation)
+  - [x] Announce deletion to screen readers
+- [x] Style delete button (AC: 1, 2)
+  - [x] Use destructive variant styling
+  - [x] Red color on hover
+  - [x] Proper spacing from other actions
+- [x] Write unit tests (AC: 1-4)
+  - [x] Test delete button renders
+  - [x] Test delete functionality
+  - [x] Test confirmation flow
+  - [x] Test animation classes applied
 
 ## Dev Notes
 
@@ -175,24 +175,41 @@ Desktop hover behavior:
 | Date       | Version | Description            | Author       |
 | ---------- | ------- | ---------------------- | ------------ |
 | 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
+| 2025-09-03 | 1.1     | Story completed        | Dev Agent    |
 
 ## Dev Agent Record
 
 ### Agent Model Used
 
-_To be filled by Dev Agent_
+claude-opus-4-1-20250805
 
 ### Debug Log References
 
-_To be filled by Dev Agent_
+- Enhanced error handling in deleteTodo hook to gracefully handle non-existent todos
+- Fixed test expectations to align with error handling behavior
+- Added screen reader announcements for delete operations
 
 ### Completion Notes List
 
-_To be filled by Dev Agent_
+- TodoActions component created for reusable action buttons
+- Delete confirmation using native window.confirm() for MVP simplicity
+- Slide-out animation (300ms) for smooth visual feedback
+- Error handling with graceful fallback for failed deletions
+- Full keyboard accessibility with proper ARIA labels
+- Screen reader announcements for delete operations
+- Hover states on desktop, always visible on touch devices
+- Comprehensive unit tests for all delete functionality
 
 ### File List
 
-_To be filled by Dev Agent_
+- Created: `/src/components/todo/TodoActions.tsx`
+- Modified: `/src/components/todo/TodoItem.tsx`
+- Modified: `/src/lib/hooks/useTodos.ts`
+- Modified: `/src/app/globals.css`
+- Created: `/tests/unit/components/todo/TodoActions.test.tsx`
+- Created: `/tests/unit/components/todo/TodoItem.delete.test.tsx`
+- Created: `/tests/unit/lib/hooks/useTodos.delete.test.ts`
+- Modified: `/tests/unit/components/todo/TodoItem.test.tsx`
 
 ## QA Results
 
