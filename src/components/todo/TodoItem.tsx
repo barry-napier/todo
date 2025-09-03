@@ -18,6 +18,7 @@ interface TodoItemProps {
 export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
+  const [isDeleting, setIsDeleting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -37,7 +38,8 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
     setIsEditing(false);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (e?: React.MouseEvent) => {
+    e?.preventDefault();
     setEditText(todo.text);
     setIsEditing(false);
   };
@@ -50,8 +52,15 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
     }
   };
 
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setTimeout(() => {
+      onDelete(todo.id);
+    }, 300); // Match animation duration
+  };
+
   return (
-    <Card className="p-3 transition-all hover:shadow-md">
+    <Card className={`p-3 transition-all hover:shadow-md ${isDeleting ? 'animate-slide-out' : ''}`}>
       <div className="flex items-center gap-3">
         <Checkbox
           id={`todo-${todo.id}`}
@@ -84,6 +93,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
             <Button
               size="icon"
               variant="ghost"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={handleCancel}
               aria-label="Cancel editing"
               className="min-w-[32px] min-h-[32px]"
@@ -114,7 +124,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
               <Button
                 size="icon"
                 variant="ghost"
-                onClick={() => onDelete(todo.id)}
+                onClick={handleDelete}
                 aria-label={`Delete "${todo.text}"`}
                 className="min-w-[32px] min-h-[32px] text-red-500 hover:text-red-600"
               >
