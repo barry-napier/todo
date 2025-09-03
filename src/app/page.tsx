@@ -10,25 +10,27 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center py-12 text-red-500">
+      <main className="max-w-2xl mx-auto" role="main">
+        <div className="text-center py-12 text-red-500" role="alert">
           <p>Failed to load todos. Please refresh the page.</p>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="text-center mb-8">
+    <main id="main-content" className="max-w-2xl mx-auto space-y-6" role="main">
+      <header className="text-center mb-8">
         <h1 className="text-3xl font-bold mb-2">My Todos</h1>
         <p className="text-muted-foreground">Keep track of your tasks</p>
-      </div>
+      </header>
 
-      <AddTodo onAdd={addTodo} />
+      <section aria-label="Add new todo">
+        <AddTodo onAdd={addTodo} />
+      </section>
 
       {isLoading ? (
-        <div className="space-y-3">
+        <div className="space-y-3" aria-busy="true" aria-label="Loading todos">
           {[1, 2, 3].map((i) => (
             <div key={i} className="flex items-center space-x-3 rounded-lg border p-4">
               <Skeleton className="h-5 w-5 rounded" />
@@ -40,6 +42,6 @@ export default function Home() {
       ) : (
         <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} onUpdate={updateTodo} />
       )}
-    </div>
+    </main>
   );
 }

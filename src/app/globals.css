@@ -133,6 +133,86 @@
     white-space: nowrap;
     border-width: 0;
   }
+
+  .focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --border: oklch(0.5 0 0);
+      --ring: oklch(0.3 0 0);
+    }
+
+    .dark {
+      --border: oklch(0.8 0 0);
+      --ring: oklch(0.9 0 0);
+    }
+
+    * {
+      @apply outline-2;
+    }
+
+    button:focus,
+    a:focus,
+    input:focus,
+    textarea:focus,
+    select:focus,
+    [tabindex]:focus {
+      @apply outline-dashed outline-offset-2;
+    }
+
+    /* Ensure borders are visible */
+    .border,
+    .border-t,
+    .border-b,
+    .border-l,
+    .border-r {
+      border-width: 2px !important;
+    }
+
+    /* Enhance focus indicators */
+    .focus-within\:ring-2:focus-within {
+      @apply ring-4;
+    }
+
+    .focus\:ring-2:focus {
+      @apply ring-4;
+    }
+
+    /* Ensure text decorations are visible */
+    .line-through {
+      text-decoration-thickness: 3px !important;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .animate-fade-in,
+    .animate-slide-in-from-top,
+    .animate-slide-out {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
   @keyframes slide-in-from-top {
     from {
       opacity: 0;

@@ -15,9 +15,11 @@ interface TodoItemProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: Partial<Pick<Todo, 'text' | 'completed'>>) => void;
+  tabIndex?: number;
+  index?: number;
 }
 
-export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) {
+export function TodoItem({ todo, onToggle, onDelete, onUpdate, tabIndex = 0 }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -110,8 +112,19 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
         // Responsive padding
         'p-3 sm:p-4',
         isDeleting && 'animate-slide-out',
-        todo.completed && 'opacity-60'
+        todo.completed && 'opacity-60',
+        // Focus styles for keyboard navigation
+        'focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2'
       )}
+      data-todo-item
+      tabIndex={tabIndex}
+      role="article"
+      aria-label={`Todo: ${todo.text}${todo.completed ? ', completed' : ''}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && !isEditing) {
+          setIsEditing(true);
+        }
+      }}
     >
       <div className="flex items-start sm:items-center gap-2 sm:gap-3">
         <TodoCheckbox
@@ -132,7 +145,12 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
               onBlur={handleSave}
               className="flex-1 h-10 sm:h-9"
               maxLength={500}
+              aria-label="Edit todo text"
+              aria-describedby={`edit-instructions-${todo.id}`}
             />
+            <span id={`edit-instructions-${todo.id}`} className="sr-only">
+              Press Enter to save, Escape to cancel
+            </span>
             <div className="flex gap-2">
               <Button
                 size="icon"
@@ -165,6 +183,15 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
                 'py-1 sm:py-0',
                 todo.completed && 'line-through text-muted-foreground decoration-2'
               )}
+              role="button"
+              tabIndex={-1}
+              aria-label={`${todo.text}, click to edit`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setIsEditing(true);
+                }
+              }}
             >
               {todo.text}
             </span>
