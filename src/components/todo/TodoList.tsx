@@ -99,7 +99,7 @@ export function TodoList({ todos, onToggle, onDelete, onUpdate }: TodoListProps)
   }
 
   return (
-    <section aria-label="Todo list">
+    <section aria-label="Todo list" className="flex flex-col gap-4">
       {/* Todo count indicator above the list */}
       <div
         className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-2 py-3 text-xs sm:text-sm text-muted-foreground border-b gap-1 sm:gap-0"
@@ -124,7 +124,7 @@ export function TodoList({ todos, onToggle, onDelete, onUpdate }: TodoListProps)
 
       <div
         ref={containerRef}
-        className="space-y-2 sm:space-y-3"
+        className="space-y-2 sm:space-y-3 mt-6"
         role="list"
         aria-label="Todo items"
       >
