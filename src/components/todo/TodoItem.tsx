@@ -3,10 +3,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Trash2, Edit2, Check, X } from 'lucide-react';
 import { Todo } from '@/types/todo';
-import { Checkbox } from '@/components/ui/checkbox';
+import { TodoCheckbox } from '@/components/todo/TodoCheckbox';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface TodoItemProps {
   todo: Todo;
@@ -60,13 +61,19 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
   };
 
   return (
-    <Card className={`p-3 transition-all hover:shadow-md ${isDeleting ? 'animate-slide-out' : ''}`}>
+    <Card
+      className={cn(
+        'p-3 transition-all duration-300 hover:shadow-md',
+        isDeleting && 'animate-slide-out',
+        todo.completed && 'opacity-60'
+      )}
+    >
       <div className="flex items-center gap-3">
-        <Checkbox
-          id={`todo-${todo.id}`}
+        <TodoCheckbox
+          todoId={todo.id}
+          todoText={todo.text}
           checked={todo.completed}
           onCheckedChange={() => onToggle(todo.id)}
-          aria-label={`Mark "${todo.text}" as ${todo.completed ? 'incomplete' : 'complete'}`}
           className="min-w-[20px] min-h-[20px]"
         />
 
@@ -105,9 +112,10 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
           <>
             <label
               htmlFor={`todo-${todo.id}`}
-              className={`flex-1 cursor-pointer ${
-                todo.completed ? 'line-through text-muted-foreground' : ''
-              }`}
+              className={cn(
+                'flex-1 cursor-pointer transition-all duration-200',
+                todo.completed && 'line-through text-muted-foreground decoration-2'
+              )}
             >
               {todo.text}
             </label>

@@ -49,6 +49,41 @@ describe('TodoItem', () => {
     const todoText = screen.getByText('Test todo');
     expect(todoText).toHaveClass('line-through');
     expect(todoText).toHaveClass('text-muted-foreground');
+    expect(todoText).toHaveClass('decoration-2');
+  });
+
+  it('should apply opacity to completed todo card', () => {
+    const completedTodo = { ...mockTodo, completed: true };
+
+    const { container } = render(
+      <TodoItem
+        todo={completedTodo}
+        onToggle={mockOnToggle}
+        onDelete={mockOnDelete}
+        onUpdate={mockOnUpdate}
+      />
+    );
+
+    const card = container.querySelector('.opacity-60');
+    expect(card).toBeInTheDocument();
+  });
+
+  it('should have transition animations for visual feedback', () => {
+    const { container } = render(
+      <TodoItem
+        todo={mockTodo}
+        onToggle={mockOnToggle}
+        onDelete={mockOnDelete}
+        onUpdate={mockOnUpdate}
+      />
+    );
+
+    const card = container.querySelector('[class*="transition-all"]');
+    expect(card).toBeInTheDocument();
+    expect(card).toHaveClass('duration-300');
+
+    const todoText = screen.getByText('Test todo');
+    expect(todoText).toHaveClass('transition-all', 'duration-200');
   });
 
   it('should call onToggle when checkbox is clicked', async () => {
@@ -294,5 +329,71 @@ describe('TodoItem', () => {
 
     expect(mockOnUpdate).not.toHaveBeenCalled();
     expect(screen.getByText('Test todo')).toBeInTheDocument();
+  });
+
+  describe('Accessibility for Toggle', () => {
+    it('should have proper aria-label on checkbox for uncompleted todo', () => {
+      render(
+        <TodoItem
+          todo={mockTodo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onUpdate={mockOnUpdate}
+        />
+      );
+
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('aria-label', 'Mark "Test todo" as complete');
+    });
+
+    it('should have proper aria-label on checkbox for completed todo', () => {
+      const completedTodo = { ...mockTodo, completed: true };
+
+      render(
+        <TodoItem
+          todo={completedTodo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onUpdate={mockOnUpdate}
+        />
+      );
+
+      const checkbox = screen.getByRole('checkbox');
+      expect(checkbox).toHaveAttribute('aria-label', 'Mark "Test todo" as incomplete');
+    });
+
+    it('should support keyboard focus on checkbox', () => {
+      render(
+        <TodoItem
+          todo={mockTodo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onUpdate={mockOnUpdate}
+        />
+      );
+
+      const checkbox = screen.getByRole('checkbox');
+      checkbox.focus();
+      expect(checkbox).toHaveFocus();
+      // Radix UI CheckboxPrimitive handles keyboard events (Space/Enter) internally
+      // The onToggle is called through Radix's internal keyboard handling
+    });
+
+    it('should have label correctly associated with checkbox', () => {
+      render(
+        <TodoItem
+          todo={mockTodo}
+          onToggle={mockOnToggle}
+          onDelete={mockOnDelete}
+          onUpdate={mockOnUpdate}
+        />
+      );
+
+      const label = screen.getByText('Test todo');
+      const checkbox = screen.getByRole('checkbox');
+
+      expect(label).toHaveAttribute('for', `todo-${mockTodo.id}`);
+      expect(checkbox).toHaveAttribute('id', `todo-${mockTodo.id}`);
+    });
   });
 });
