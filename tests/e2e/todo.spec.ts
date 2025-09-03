@@ -2,12 +2,16 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Personal Todo App', () => {
   test.beforeEach(async ({ page }) => {
+    // Clear localStorage first
     await page.goto('/');
-    // Clear localStorage to start fresh
     await page.evaluate(() => localStorage.clear());
-    await page.reload();
-    // Wait for page to be ready
+    await page.goto('/');
+    // Wait for page to be ready with multiple strategies
+    await page.waitForLoadState('domcontentloaded');
     await page.waitForLoadState('networkidle');
+    // Ensure key elements are loaded
+    await expect(page.getByRole('textbox', { name: 'New todo input' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: 'Add todo' })).toBeVisible({ timeout: 10000 });
   });
 
   test.describe('Core CRUD Operations', () => {
