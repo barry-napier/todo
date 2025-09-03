@@ -19,7 +19,6 @@ export const metadata: Metadata = {
   title: 'Personal Todo App',
   description: 'A simple, effective todo list management system',
   manifest: '/manifest.json',
-  themeColor: '#3b82f6',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -46,6 +45,7 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: 'yes',
+  themeColor: '#3b82f6',
 };
 
 export default function RootLayout({
