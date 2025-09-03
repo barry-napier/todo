@@ -156,7 +156,7 @@ export class LocalStorageService {
     if (!data || typeof data !== 'object' || data === null) return false;
 
     const obj = data as Record<string, unknown>;
-    
+
     // Check required fields
     if (!Array.isArray(obj.todos)) return false;
     if (!obj.version || typeof obj.version !== 'string') return false;
@@ -173,7 +173,7 @@ export class LocalStorageService {
     if (!todo || typeof todo !== 'object' || todo === null) return false;
 
     const obj = todo as Record<string, unknown>;
-    
+
     // Check required fields
     if (!obj.id || typeof obj.id !== 'string') return false;
     if (!obj.text || typeof obj.text !== 'string') return false;

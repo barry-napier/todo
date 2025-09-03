@@ -4,6 +4,7 @@ export interface Todo {
   completed: boolean;
   createdAt: Date;
   updatedAt: Date;
+  isPending?: boolean;
 }
 
 export interface TodoCreateInput {
