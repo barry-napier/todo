@@ -1,20 +1,24 @@
 # Story 1.3: Data Persistence Layer
 
 ## Status
+
 Draft
 
 ## Story
+
 **As a** user,
 **I want** my todos to persist between sessions,
 **so that** I don't lose my task list when I close the browser
 
 ## Acceptance Criteria
+
 1. localStorage service created with TypeScript interfaces
 2. Todo data model defined (id, text, completed, createdAt, updatedAt)
 3. Save/load/update functions implemented
 4. Error handling for storage quota and availability
 
 ## Tasks / Subtasks
+
 - [ ] Create Todo TypeScript interfaces (AC: 2)
   - [ ] Define Todo interface with all required fields in `/src/types/todo.ts`
   - [ ] Define TodoCreateInput interface for new todo input
@@ -62,16 +66,19 @@ Draft
 ## Dev Notes
 
 ### Previous Story Insights
+
 Stories 1.1 and 1.2 have set up the Next.js project with TypeScript and integrated shadcn/ui components. The project structure and base configuration are in place.
 
 ### Data Models
+
 [Source: architecture/data-models.md]
 
 **Todo Model Structure:**
+
 ```typescript
 interface Todo {
-  id: string;        // UUID format
-  text: string;      // Max 500 characters
+  id: string; // UUID format
+  text: string; // Max 500 characters
   completed: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -79,6 +86,7 @@ interface Todo {
 ```
 
 **Storage Format:**
+
 ```json
 {
   "todos": [...],
@@ -88,15 +96,18 @@ interface Todo {
 ```
 
 **Validation Rules:**
+
 - Todo text required, min 1 char, max 500 chars
 - No line breaks allowed in text
 - Text should be trimmed
 - UUID must follow standard format
 
 ### File Locations
+
 [Source: architecture/source-tree.md]
 
 Create these files:
+
 - `/src/types/todo.ts` - Todo interfaces
 - `/src/lib/storage/localStorage.ts` - LocalStorage service
 - `/src/lib/storage/storageService.ts` - Todo service wrapper
@@ -104,30 +115,37 @@ Create these files:
 - `/src/lib/utils/validation.ts` - Input validation utilities
 
 ### Implementation Details
+
 [Source: architecture/data-models.md]
 
 **LocalStorageService Class:**
+
 - Storage key: 'todos'
 - Storage version: '1.0.0'
 - Must handle QuotaExceededError
 - Include migration logic placeholder for future schema changes
 
 **TodoService Class:**
+
 - Use uuid package for ID generation
 - Implement CRUD operations as shown in data-models.md
 - Apply sanitization on all text inputs
 - Update timestamps appropriately
 
 ### Technical Constraints
+
 [Source: architecture/tech-stack.md]
+
 - TypeScript 5.3.3 with strict mode
 - Use uuid ^9.0.1 for ID generation
 - No external state management libraries (use React built-in)
 
 ### Testing
+
 [Source: architecture/coding-standards.md]
 
 **Testing Requirements:**
+
 - Use Vitest for unit tests
 - Test files named: `*.test.ts`
 - Place tests in `/tests/unit/lib/storage/`
@@ -136,6 +154,7 @@ Create these files:
 - Test both success and error paths
 
 **Test Coverage Required:**
+
 - All CRUD operations
 - Error handling (quota exceeded, localStorage unavailable)
 - Validation and sanitization
@@ -143,23 +162,29 @@ Create these files:
 - Version migration logic
 
 ## Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial story creation | Scrum Master |
+
+| Date       | Version | Description            | Author       |
+| ---------- | ------- | ---------------------- | ------------ |
+| 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
 
 ## Dev Agent Record
 
 ### Agent Model Used
+
 _To be filled by Dev Agent_
 
 ### Debug Log References
+
 _To be filled by Dev Agent_
 
 ### Completion Notes List
+
 _To be filled by Dev Agent_
 
 ### File List
+
 _To be filled by Dev Agent_
 
 ## QA Results
+
 _To be filled by QA Agent_

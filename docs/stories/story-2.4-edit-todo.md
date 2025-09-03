@@ -1,14 +1,17 @@
 # Story 2.4: Edit Todo Text
 
 ## Status
+
 Draft
 
 ## Story
+
 **As a** user,
 **I want** to edit existing todo text,
 **so that** I can correct mistakes or add details
 
 ## Acceptance Criteria
+
 1. Click/tap on todo text to enter edit mode
 2. Edit icon button as alternative trigger
 3. Inline editing with same-size input field
@@ -17,6 +20,7 @@ Draft
 6. Validation prevents empty todos
 
 ## Tasks / Subtasks
+
 - [ ] Add edit mode to TodoItem (AC: 1, 3)
   - [ ] Add isEditing state to TodoItem component
   - [ ] Toggle edit mode on text click
@@ -59,14 +63,17 @@ Draft
 ## Dev Notes
 
 ### Previous Story Context
+
 - TodoItem component from Story 2.2
 - TodoCheckbox from Story 2.3
 - useTodos hook with CRUD operations
 
 ### Edit Mode Implementation
+
 [Source: architecture/coding-standards.md]
 
 TodoItem state management:
+
 ```typescript
 const [isEditing, setIsEditing] = useState(false);
 const [editText, setEditText] = useState(todo.text);
@@ -85,9 +92,11 @@ const handleCancel = () => {
 ```
 
 ### Input Component Usage
+
 [Source: architecture/source-tree.md]
 
 Use shadcn/ui Input:
+
 ```typescript
 import { Input } from "@/components/ui/input"
 
@@ -107,6 +116,7 @@ import { Input } from "@/components/ui/input"
 ```
 
 ### Keyboard Handling
+
 ```typescript
 const handleKeyDown = (e: KeyboardEvent) => {
   if (e.key === 'Enter') {
@@ -118,50 +128,64 @@ const handleKeyDown = (e: KeyboardEvent) => {
 ```
 
 ### Validation Rules
+
 [Source: architecture/data-models.md]
+
 - Min length: 1 character (after trim)
 - Max length: 500 characters
 - No empty todos allowed
 
 ### Edit Icon Button
+
 Use lucide-react icons:
+
 ```typescript
-import { Pencil } from "lucide-react"
+import { Pencil } from 'lucide-react';
 ```
 
 ### Technical Constraints
+
 [Source: architecture/tech-stack.md]
+
 - Response time < 100ms
 - Optimistic UI updates
 - TypeScript strict mode
 
 ### Testing
+
 [Source: architecture/coding-standards.md]
 
 **Test Requirements:**
+
 - Test file: `/tests/unit/components/todo/TodoItem.test.tsx`
 - Test edit mode transitions
 - Test validation scenarios
 - Mock edit callbacks
 
 ## Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial story creation | Scrum Master |
+
+| Date       | Version | Description            | Author       |
+| ---------- | ------- | ---------------------- | ------------ |
+| 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
 
 ## Dev Agent Record
 
 ### Agent Model Used
+
 _To be filled by Dev Agent_
 
 ### Debug Log References
+
 _To be filled by Dev Agent_
 
 ### Completion Notes List
+
 _To be filled by Dev Agent_
 
 ### File List
+
 _To be filled by Dev Agent_
 
 ## QA Results
+
 _To be filled by QA Agent_

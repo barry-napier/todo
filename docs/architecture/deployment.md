@@ -3,9 +3,11 @@
 ## Deployment Platform
 
 ### Vercel (Primary)
+
 **Rationale:** Optimal Next.js integration with zero-config deployment
 
 **Features:**
+
 - Automatic deployments from GitHub
 - Preview deployments for PRs
 - Edge Functions for API routes
@@ -16,6 +18,7 @@
 ### Environment Configuration
 
 #### Environment Variables
+
 ```bash
 # .env.local (Development)
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -32,6 +35,7 @@ VERCEL_ANALYTICS_ID=your-analytics-id
 ```
 
 #### vercel.json Configuration
+
 ```json
 {
   "framework": "nextjs",
@@ -104,25 +108,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run linter
         run: npm run lint
-      
+
       - name: Run type check
         run: npm run type-check
-      
+
       - name: Run tests
         run: npm run test
-      
+
       - name: Build application
         run: npm run build
 
@@ -130,10 +134,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
@@ -146,6 +150,7 @@ jobs:
 ### Deployment Process
 
 #### Development Workflow
+
 1. Create feature branch
 2. Make changes and commit
 3. Push to GitHub
@@ -154,6 +159,7 @@ jobs:
 6. Merge to main after approval
 
 #### Production Deployment
+
 1. Merge PR to main branch
 2. GitHub Actions runs tests
 3. Vercel automatically deploys
@@ -163,6 +169,7 @@ jobs:
 ## Build Optimization
 
 ### Next.js Optimization Config
+
 ```javascript
 // next.config.js
 /** @type {import('next').NextConfig} */
@@ -181,10 +188,10 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
-  
+
   // Output optimization
   output: 'standalone',
-  
+
   // Bundle analyzer
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -201,6 +208,7 @@ module.exports = nextConfig;
 ```
 
 ### Performance Budgets
+
 ```json
 {
   "performanceBudget": {
@@ -216,6 +224,7 @@ module.exports = nextConfig;
 ## Monitoring & Analytics
 
 ### Vercel Analytics Setup
+
 ```typescript
 // app/layout.tsx
 import { Analytics } from '@vercel/analytics/react';
@@ -239,6 +248,7 @@ export default function RootLayout({
 ```
 
 ### Custom Analytics Events
+
 ```typescript
 // lib/analytics.ts
 import { track } from '@vercel/analytics';
@@ -255,6 +265,7 @@ trackEvent('todo_completed', { completionTime: Date.now() - createdAt });
 ```
 
 ### Error Monitoring
+
 ```typescript
 // lib/errorReporting.ts
 export function reportError(error: Error, context?: any) {
@@ -269,6 +280,7 @@ export function reportError(error: Error, context?: any) {
 ## Security Configuration
 
 ### Security Headers
+
 ```typescript
 // middleware.ts
 import { NextResponse } from 'next/server';
@@ -276,7 +288,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
-  
+
   // Security headers
   response.headers.set('X-DNS-Prefetch-Control', 'on');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
@@ -285,7 +297,7 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  
+
   return response;
 }
 
@@ -295,6 +307,7 @@ export const config = {
 ```
 
 ### Content Security Policy
+
 ```typescript
 const cspHeader = `
   default-src 'self';
@@ -314,6 +327,7 @@ const cspHeader = `
 ## Rollback Strategy
 
 ### Vercel Rollback Process
+
 1. Access Vercel Dashboard
 2. Navigate to Deployments
 3. Find previous stable deployment
@@ -321,32 +335,33 @@ const cspHeader = `
 5. Confirm rollback
 
 ### Automated Rollback
+
 ```javascript
 // scripts/rollback.js
 const { exec } = require('child_process');
 
 async function rollback(deploymentId) {
-  exec(`vercel alias set ${deploymentId} your-domain.vercel.app`, 
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Rollback failed: ${error}`);
-        return;
-      }
-      console.log(`Rolled back to: ${deploymentId}`);
+  exec(`vercel alias set ${deploymentId} your-domain.vercel.app`, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Rollback failed: ${error}`);
+      return;
     }
-  );
+    console.log(`Rolled back to: ${deploymentId}`);
+  });
 }
 ```
 
 ## Scaling Strategy
 
 ### Vercel Auto-Scaling
+
 - Automatic horizontal scaling
 - Global edge network distribution
 - Serverless function concurrency
 - No configuration needed
 
 ### Performance Optimization
+
 1. **Static Generation**: Pre-render pages at build time
 2. **ISR**: Incremental Static Regeneration for dynamic content
 3. **Edge Functions**: Run API routes at edge locations
@@ -354,6 +369,7 @@ async function rollback(deploymentId) {
 5. **Code Splitting**: Automatic per-page code splitting
 
 ### Caching Strategy
+
 ```typescript
 // API Route caching
 export async function GET() {
@@ -371,6 +387,7 @@ export async function GET() {
 ## Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] All tests passing
 - [ ] TypeScript build successful
 - [ ] ESLint no errors
@@ -379,6 +396,7 @@ export async function GET() {
 - [ ] Security headers configured
 
 ### Post-Deployment
+
 - [ ] Verify production URL
 - [ ] Test critical user flows
 - [ ] Check analytics tracking
@@ -387,6 +405,7 @@ export async function GET() {
 - [ ] Test on multiple devices
 
 ### Rollback Criteria
+
 - [ ] 500 errors > 1% of requests
 - [ ] Core functionality broken
 - [ ] Performance degradation > 20%

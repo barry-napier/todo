@@ -3,6 +3,7 @@
 ## TypeScript Guidelines
 
 ### Type Safety
+
 ```typescript
 // ALWAYS use explicit types for function parameters and returns
 function addTodo(text: string): Todo {
@@ -11,13 +12,14 @@ function addTodo(text: string): Todo {
 
 // NEVER use 'any' type
 // ❌ Bad
-function processTodo(data: any) { }
+function processTodo(data: any) {}
 
 // ✅ Good
-function processTodo(data: Todo) { }
+function processTodo(data: Todo) {}
 ```
 
 ### Interface Conventions
+
 ```typescript
 // Use interfaces for objects
 interface TodoProps {
@@ -32,6 +34,7 @@ type TodoId = string;
 ```
 
 ### Null Safety
+
 ```typescript
 // Use optional chaining and nullish coalescing
 const todoText = todo?.text ?? 'No description';
@@ -45,6 +48,7 @@ if (todo !== null && todo !== undefined) {
 ## React Component Standards
 
 ### Component Structure
+
 ```typescript
 // 1. Imports
 import React, { useState, useCallback } from 'react';
@@ -60,15 +64,15 @@ interface TodoItemProps {
 export function TodoItem({ todo, onUpdate }: TodoItemProps) {
   // 4. State
   const [isEditing, setIsEditing] = useState(false);
-  
+
   // 5. Callbacks/Handlers
   const handleToggle = useCallback(() => {
     onUpdate({ ...todo, completed: !todo.completed });
   }, [todo, onUpdate]);
-  
+
   // 6. Effects
   // useEffect hooks here
-  
+
   // 7. Render
   return (
     <div>
@@ -79,15 +83,17 @@ export function TodoItem({ todo, onUpdate }: TodoItemProps) {
 ```
 
 ### Naming Conventions
+
 - Components: PascalCase (`TodoItem`, `AddTodoForm`)
 - Hooks: camelCase with 'use' prefix (`useTodos`, `useLocalStorage`)
 - Event handlers: 'handle' prefix (`handleSubmit`, `handleDelete`)
 - Boolean props: 'is/has' prefix (`isCompleted`, `hasError`)
 
 ### Props Conventions
+
 ```typescript
 // Destructure props in function signature
-function TodoItem({ todo, onToggle }: TodoItemProps) { }
+function TodoItem({ todo, onToggle }: TodoItemProps) {}
 
 // Use explicit children type when needed
 interface LayoutProps {
@@ -99,6 +105,7 @@ interface LayoutProps {
 ## File Organization
 
 ### Directory Structure
+
 ```
 src/
   app/                 # Next.js app router pages
@@ -123,6 +130,7 @@ src/
 ```
 
 ### File Naming
+
 - Components: PascalCase.tsx (`TodoItem.tsx`)
 - Utilities: camelCase.ts (`localStorage.ts`)
 - Types: camelCase.ts (`todo.ts`)
@@ -131,6 +139,7 @@ src/
 ## State Management
 
 ### Local State
+
 ```typescript
 // Use useState for component-specific state
 const [todos, setTodos] = useState<Todo[]>([]);
@@ -140,6 +149,7 @@ const [state, dispatch] = useReducer(todoReducer, initialState);
 ```
 
 ### State Updates
+
 ```typescript
 // Always create new objects/arrays
 // ❌ Bad - mutating state
@@ -156,6 +166,7 @@ setTodo({ ...todo, completed: true });
 ## Error Handling
 
 ### Try-Catch Patterns
+
 ```typescript
 async function saveTodos(todos: Todo[]): Promise<void> {
   try {
@@ -169,12 +180,13 @@ async function saveTodos(todos: Todo[]): Promise<void> {
 ```
 
 ### Error Boundaries
+
 ```typescript
 class ErrorBoundary extends React.Component {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Component error:', error, errorInfo);
   }
-  
+
   render() {
     if (this.state.hasError) {
       return <ErrorFallback />;
@@ -187,12 +199,10 @@ class ErrorBoundary extends React.Component {
 ## Performance Guidelines
 
 ### Memoization
+
 ```typescript
 // Memoize expensive computations
-const completedCount = useMemo(
-  () => todos.filter(t => t.completed).length,
-  [todos]
-);
+const completedCount = useMemo(() => todos.filter((t) => t.completed).length, [todos]);
 
 // Memoize callbacks passed to children
 const handleToggle = useCallback((id: string) => {
@@ -206,6 +216,7 @@ const TodoItem = React.memo(({ todo }: Props) => {
 ```
 
 ### Lazy Loading
+
 ```typescript
 // Lazy load heavy components
 const Analytics = lazy(() => import('./Analytics'));
@@ -217,6 +228,7 @@ const Settings = lazy(() => import('./routes/Settings'));
 ## Testing Standards
 
 ### Test Structure
+
 ```typescript
 describe('TodoItem', () => {
   it('should render todo text', () => {
@@ -224,7 +236,7 @@ describe('TodoItem', () => {
     render(<TodoItem todo={todo} />);
     expect(screen.getByText('Test todo')).toBeInTheDocument();
   });
-  
+
   it('should call onToggle when checkbox clicked', () => {
     const onToggle = vi.fn();
     // test implementation
@@ -233,6 +245,7 @@ describe('TodoItem', () => {
 ```
 
 ### Test Naming
+
 - Describe what is being tested
 - Use 'should' for expected behavior
 - Be specific about conditions
@@ -240,6 +253,7 @@ describe('TodoItem', () => {
 ## Accessibility Standards
 
 ### ARIA Attributes
+
 ```typescript
 <button
   aria-label="Delete todo"
@@ -251,6 +265,7 @@ describe('TodoItem', () => {
 ```
 
 ### Semantic HTML
+
 ```typescript
 // Use semantic elements
 <main>
@@ -266,6 +281,7 @@ describe('TodoItem', () => {
 ```
 
 ### Keyboard Navigation
+
 ```typescript
 // Ensure all interactive elements are keyboard accessible
 <div
@@ -282,6 +298,7 @@ describe('TodoItem', () => {
 ## Git Conventions
 
 ### Commit Messages
+
 ```
 feat: add todo completion animation
 fix: resolve localStorage quota error
@@ -293,6 +310,7 @@ chore: update dependencies
 ```
 
 ### Branch Naming
+
 ```
 feature/add-todo-filters
 bugfix/fix-delete-animation

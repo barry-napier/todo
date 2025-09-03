@@ -1,14 +1,17 @@
 # Story 2.5: Delete Todo
 
 ## Status
+
 Draft
 
 ## Story
+
 **As a** user,
 **I want** to delete todos I no longer need,
 **so that** I can keep my list relevant
 
 ## Acceptance Criteria
+
 1. Delete button/icon for each todo
 2. Hover state shows delete option
 3. Confirmation for delete action (optional setting)
@@ -16,6 +19,7 @@ Draft
 5. Undo capability (future enhancement)
 
 ## Tasks / Subtasks
+
 - [ ] Add delete button to TodoItem (AC: 1, 2)
   - [ ] Create TodoActions component for action buttons
   - [ ] Add delete icon button with Trash icon
@@ -56,30 +60,37 @@ Draft
 ## Dev Notes
 
 ### Previous Story Context
+
 - TodoItem component with edit functionality
 - TodoActions area for buttons
 - useTodos hook with state management
 
 ### Component Structure
+
 [Source: architecture/source-tree.md]
 
 Create/update:
+
 - `/src/components/todo/TodoActions.tsx` - Action buttons container
 
 ### Delete Implementation
+
 [Source: architecture/data-models.md]
 
 Delete function:
+
 ```typescript
 function deleteTodo(id: string) {
-  setTodos(prev => prev.filter(todo => todo.id !== id));
+  setTodos((prev) => prev.filter((todo) => todo.id !== id));
   // Update localStorage
   storageService.deleteTodo(id);
 }
 ```
 
 ### Delete Button
+
 Use lucide-react icon:
+
 ```typescript
 import { Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -95,7 +106,9 @@ import { Button } from "@/components/ui/button"
 ```
 
 ### Animation Classes
+
 CSS for removal:
+
 ```css
 .todo-exit {
   opacity: 1;
@@ -110,7 +123,9 @@ CSS for removal:
 ```
 
 ### Confirmation Dialog
+
 Simple implementation:
+
 ```typescript
 const handleDelete = (id: string) => {
   if (window.confirm('Delete this todo?')) {
@@ -120,9 +135,11 @@ const handleDelete = (id: string) => {
 ```
 
 ### Hover States
+
 [Source: architecture/coding-standards.md]
 
 Desktop hover behavior:
+
 ```css
 .todo-item .todo-actions {
   opacity: 0;
@@ -135,38 +152,48 @@ Desktop hover behavior:
 ```
 
 ### Technical Constraints
+
 [Source: architecture/tech-stack.md]
+
 - Maintain < 100ms response time
 - Smooth animations without jank
 - TypeScript strict mode
 
 ### Testing
+
 [Source: architecture/coding-standards.md]
 
 **Test Requirements:**
+
 - Test file: `/tests/unit/components/todo/TodoActions.test.tsx`
 - Test delete button interaction
 - Test confirmation flow
 - Verify todo removal from list
 
 ## Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial story creation | Scrum Master |
+
+| Date       | Version | Description            | Author       |
+| ---------- | ------- | ---------------------- | ------------ |
+| 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
 
 ## Dev Agent Record
 
 ### Agent Model Used
+
 _To be filled by Dev Agent_
 
 ### Debug Log References
+
 _To be filled by Dev Agent_
 
 ### Completion Notes List
+
 _To be filled by Dev Agent_
 
 ### File List
+
 _To be filled by Dev Agent_
 
 ## QA Results
+
 _To be filled by QA Agent_
