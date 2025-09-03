@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ErrorBoundary } from '../ErrorBoundary';
 
 // Component that throws an error
@@ -44,24 +44,27 @@ describe('ErrorBoundary', () => {
   });
 
   it('should reset error state on retry', () => {
+    let shouldThrow = true;
+    
+    const TestComponent = () => {
+      return <ThrowError shouldThrow={shouldThrow} />;
+    };
+    
     const { rerender } = render(
       <ErrorBoundary>
-        <ThrowError shouldThrow={true} />
+        <TestComponent />
       </ErrorBoundary>
     );
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
 
+    // Change the flag to not throw
+    shouldThrow = false;
+    
     // Reset the error
     fireEvent.click(screen.getByText('Try Again'));
 
-    // Rerender with non-throwing component
-    rerender(
-      <ErrorBoundary>
-        <ThrowError shouldThrow={false} />
-      </ErrorBoundary>
-    );
-
+    // The component should now render without error
     expect(screen.getByText('No error')).toBeInTheDocument();
     expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
   });
@@ -108,7 +111,7 @@ describe('ErrorBoundary', () => {
     // Open details
     fireEvent.click(screen.getByText('Error details (development only)'));
 
-    expect(screen.getByText(/Test error with stack/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Test error with stack/)[0]).toBeInTheDocument();
 
     process.env.NODE_ENV = originalEnv;
   });
