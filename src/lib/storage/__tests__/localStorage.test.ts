@@ -65,7 +65,7 @@ describe('LocalStorageService', () => {
       let callCount = 0;
       const mockSetItem = vi.spyOn(mockLocalStorage, 'setItem');
 
-      mockSetItem.mockImplementation((key, value) => {
+      mockSetItem.mockImplementation(() => {
         callCount++;
         // First call fails, second call (cleanup) succeeds, third call (retry) succeeds
         if (callCount === 1) {

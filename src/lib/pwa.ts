@@ -165,7 +165,11 @@ class PWAManager {
     try {
       // Background sync API is not widely supported yet
       if ('sync' in this.registration) {
-        await (this.registration as ServiceWorkerRegistration & { sync: { register: (tag: string) => Promise<void> } }).sync.register(tag);
+        await (
+          this.registration as ServiceWorkerRegistration & {
+            sync: { register: (tag: string) => Promise<void> };
+          }
+        ).sync.register(tag);
         console.log('Background sync registered:', tag);
       } else {
         console.warn('Background sync not supported');
