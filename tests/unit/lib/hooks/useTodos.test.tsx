@@ -20,8 +20,7 @@ describe('useTodos', () => {
     vi.clearAllMocks();
     localStorage.clear();
     // Default mock for uuid
-    // @ts-expect-error - Mocking uuid return value
-    vi.mocked(uuidv4).mockReturnValue('test-uuid');
+    (vi.mocked(uuidv4) as ReturnType<typeof vi.fn>).mockReturnValue('test-uuid');
   });
 
   it('should initialize with empty todos', () => {
@@ -107,8 +106,7 @@ describe('useTodos', () => {
 
   it('should clear completed todos', () => {
     // Mock uuid to return different values for each todo
-    // @ts-expect-error - Mocking uuid return values
-    vi.mocked(uuidv4)
+    (vi.mocked(uuidv4) as ReturnType<typeof vi.fn>)
       .mockReturnValueOnce('test-uuid-1')
       .mockReturnValueOnce('test-uuid-2')
       .mockReturnValueOnce('test-uuid-3');

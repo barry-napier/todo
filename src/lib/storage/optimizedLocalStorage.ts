@@ -1,23 +1,43 @@
 import { type StorageState, type Todo } from '@/types/todo';
 import { StorageError } from '@/lib/errors';
+import { BatchedStorageManager, getBatchedStorage } from './batchedStorage';
 
-export class LocalStorageService {
+export class OptimizedLocalStorageService {
   private readonly storageKey = 'todos';
   private readonly storageVersion = '1.0.0';
   private readonly pendingSyncKey = 'pendingSync';
   private readonly maxRetries = 3;
+  private batchedStorage: BatchedStorageManager;
 
-  save(state: StorageState): void {
+  constructor() {
+    this.batchedStorage = getBatchedStorage({
+      batchDelay: 100,
+      maxBatchSize: 10,
+      onError: (error: Error) => {
+        console.error('[OptimizedStorage] Batch write error:', error);
+      },
+    });
+  }
+
+  async save(state: StorageState): Promise<void> {
     let retryCount = 0;
 
     while (retryCount < this.maxRetries) {
       try {
-        const serialized = JSON.stringify({
+        const serialized = {
           ...state,
           version: this.storageVersion,
           lastSync: new Date().toISOString(),
-        });
-        localStorage.setItem(this.storageKey, serialized);
+        };
+
+        // Use batched storage for better performance
+        this.batchedStorage.set(this.storageKey, serialized);
+
+        // For critical saves, force flush immediately
+        if (state.todos.length > 100) {
+          await this.batchedStorage.forceFlush();
+        }
+
         return; // Success
       } catch (error) {
         if (error instanceof DOMException && error.name === 'QuotaExceededError') {
@@ -25,7 +45,7 @@ export class LocalStorageService {
 
           if (retryCount < this.maxRetries) {
             // Attempt cleanup and retry
-            this.cleanupOldData(state.todos);
+            await this.cleanupOldData(state.todos);
             continue;
           }
 
@@ -40,7 +60,7 @@ export class LocalStorageService {
     }
   }
 
-  private cleanupOldData(todos: Todo[]): void {
+  private async cleanupOldData(todos: Todo[]): Promise<void> {
     // Remove completed todos older than 30 days
     const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
     const filtered = todos.filter(
@@ -54,9 +74,9 @@ export class LocalStorageService {
         lastSync: new Date().toISOString(),
       };
 
-      // Try to save the cleaned data
-      const serialized = JSON.stringify(cleaned);
-      localStorage.setItem(this.storageKey, serialized);
+      // Force immediate save of cleaned data
+      this.batchedStorage.set(this.storageKey, cleaned);
+      await this.batchedStorage.forceFlush();
 
       console.info(`Cleaned up ${todos.length - filtered.length} old completed todos`);
     } else {
@@ -73,7 +93,7 @@ export class LocalStorageService {
     keys.forEach((key) => {
       if (!keysToKeep.includes(key)) {
         try {
-          localStorage.removeItem(key);
+          this.batchedStorage.remove(key);
         } catch (error) {
           console.warn(`Failed to remove localStorage key: ${key}`, error);
         }
@@ -83,7 +103,7 @@ export class LocalStorageService {
 
   savePendingSync(todos: Todo[]): void {
     try {
-      localStorage.setItem(this.pendingSyncKey, JSON.stringify(todos));
+      this.batchedStorage.set(this.pendingSyncKey, todos);
     } catch (error) {
       console.error('Failed to save pending sync data:', error);
     }
@@ -91,9 +111,8 @@ export class LocalStorageService {
 
   loadPendingSync(): Todo[] | null {
     try {
-      const data = localStorage.getItem(this.pendingSyncKey);
-      if (!data) return null;
-      return JSON.parse(data);
+      const data = this.batchedStorage.get(this.pendingSyncKey);
+      return data as Todo[] | null;
     } catch (error) {
       console.error('Failed to load pending sync data:', error);
       return null;
@@ -102,7 +121,7 @@ export class LocalStorageService {
 
   clearPendingSync(): void {
     try {
-      localStorage.removeItem(this.pendingSyncKey);
+      this.batchedStorage.remove(this.pendingSyncKey);
     } catch (error) {
       console.error('Failed to clear pending sync data:', error);
     }
@@ -110,35 +129,32 @@ export class LocalStorageService {
 
   load(): StorageState | null {
     try {
-      const data = localStorage.getItem(this.storageKey);
+      const data = this.batchedStorage.get(this.storageKey);
       if (!data) return null;
 
-      const parsed = JSON.parse(data);
-
       // Handle version migrations first (for old formats)
-      if (parsed.version && parsed.version !== this.storageVersion) {
-        return this.migrate(parsed);
+      const typedData = data as StorageState & { version: string };
+      if (typedData.version && typedData.version !== this.storageVersion) {
+        return this.migrate(typedData);
       }
 
       // Validate data structure
-      if (!this.validateStorageState(parsed)) {
+      if (!this.validateStorageState(data)) {
         console.warn('Invalid storage state detected, attempting recovery');
-        return this.recoverFromCorruptedData(parsed);
+        return this.recoverFromCorruptedData(data);
       }
 
       // Convert date strings back to Date objects
-      if (parsed.todos) {
-        parsed.todos = parsed.todos.map((todo: unknown) => {
-          const t = todo as { createdAt: string; updatedAt: string; [key: string]: unknown };
-          return {
-            ...t,
-            createdAt: new Date(t.createdAt),
-            updatedAt: new Date(t.updatedAt),
-          };
-        });
+      const typedStorageData = data as StorageState;
+      if (typedStorageData.todos) {
+        typedStorageData.todos = typedStorageData.todos.map((todo) => ({
+          ...todo,
+          createdAt: new Date(todo.createdAt as string | number | Date),
+          updatedAt: new Date(todo.updatedAt as string | number | Date),
+        }));
       }
 
-      return parsed;
+      return typedStorageData;
     } catch (error) {
       console.error('Failed to load from localStorage:', error);
       return null;
@@ -217,7 +233,7 @@ export class LocalStorageService {
     // Save the recovered data
     if (recovered.todos.length > 0) {
       try {
-        this.save(recovered);
+        this.batchedStorage.set(this.storageKey, recovered);
         console.info(`Recovered ${recovered.todos.length} todos from corrupted data`);
       } catch (error) {
         console.error('Failed to save recovered data:', error);
@@ -227,9 +243,10 @@ export class LocalStorageService {
     return recovered;
   }
 
-  clear(): void {
+  async clear(): Promise<void> {
     try {
-      localStorage.removeItem(this.storageKey);
+      this.batchedStorage.remove(this.storageKey);
+      await this.batchedStorage.forceFlush();
     } catch (error) {
       console.error('Failed to clear localStorage:', error);
     }
@@ -244,11 +261,6 @@ export class LocalStorageService {
     if ((data as { version: string }).version.startsWith('0.')) {
       migrated = this.migrateV0ToV1(migrated);
     }
-
-    // Future migrations can be added here
-    // if (semverLessThan(migrated.version, '2.0.0')) {
-    //   migrated = this.migrateV1ToV2(migrated);
-    // }
 
     // Update to current version
     migrated.version = this.storageVersion;
@@ -312,20 +324,24 @@ export class LocalStorageService {
   }
 
   async getUsage(): Promise<{ used: number; quota: number } | null> {
-    if (!navigator.storage || !navigator.storage.estimate) {
-      return null;
-    }
+    return this.batchedStorage
+      .getStorageInfo()
+      .then((info) => ({
+        used: info.used,
+        quota: info.quota,
+      }))
+      .catch(() => null);
+  }
 
-    try {
-      const estimate = await navigator.storage.estimate();
-      return {
-        used: estimate.usage || 0,
-        quota: estimate.quota || 0,
-      };
-    } catch {
-      return null;
-    }
+  // Force flush pending writes (useful before page unload)
+  async flush(): Promise<void> {
+    return this.batchedStorage.forceFlush();
+  }
+
+  // Get pending write count (for monitoring)
+  getPendingWriteCount(): number {
+    return this.batchedStorage.getPendingCount();
   }
 }
 
-export const localStorageService = new LocalStorageService();
+export const optimizedLocalStorageService = new OptimizedLocalStorageService();
