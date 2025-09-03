@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Trash2, Edit2, Check, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { Todo } from '@/types/todo';
 import { TodoCheckbox } from '@/components/todo/TodoCheckbox';
+import { TodoActions } from '@/components/todo/TodoActions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -66,16 +67,46 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
   };
 
   const handleDelete = () => {
-    setIsDeleting(true);
-    setTimeout(() => {
-      onDelete(todo.id);
-    }, 300); // Match animation duration
+    // Show confirmation dialog
+    const confirmed = window.confirm(`Delete "${todo.text}"?`);
+
+    if (confirmed) {
+      try {
+        setIsDeleting(true);
+
+        // Announce deletion to screen readers
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.className = 'sr-only';
+        announcement.textContent = `Deleting todo: ${todo.text}`;
+        document.body.appendChild(announcement);
+
+        setTimeout(() => {
+          try {
+            onDelete(todo.id);
+            // Update announcement on success
+            announcement.textContent = `Todo deleted: ${todo.text}`;
+            setTimeout(() => document.body.removeChild(announcement), 1000);
+          } catch (error) {
+            console.error('Failed to delete todo:', error);
+            setIsDeleting(false); // Reset animation state on error
+            announcement.textContent = 'Failed to delete todo';
+            setTimeout(() => document.body.removeChild(announcement), 1000);
+            alert('Failed to delete todo. Please try again.');
+          }
+        }, 300); // Match animation duration
+      } catch (error) {
+        console.error('Error initiating delete:', error);
+        setIsDeleting(false);
+      }
+    }
   };
 
   return (
     <Card
       className={cn(
-        'p-3 transition-all duration-300 hover:shadow-md',
+        'group p-3 transition-all duration-300 hover:shadow-md',
         isDeleting && 'animate-slide-out',
         todo.completed && 'opacity-60'
       )}
@@ -131,26 +162,12 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
             >
               {todo.text}
             </span>
-            <div className="flex gap-1">
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={() => setIsEditing(true)}
-                aria-label={`Edit "${todo.text}"`}
-                className="min-w-[32px] min-h-[32px]"
-              >
-                <Edit2 className="h-4 w-4" />
-              </Button>
-              <Button
-                size="icon"
-                variant="ghost"
-                onClick={handleDelete}
-                aria-label={`Delete "${todo.text}"`}
-                className="min-w-[32px] min-h-[32px] text-red-500 hover:text-red-600"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
+            <TodoActions
+              todoText={todo.text}
+              onEdit={() => setIsEditing(true)}
+              onDelete={handleDelete}
+              className="touch:opacity-100"
+            />
           </>
         )}
       </div>

@@ -63,9 +63,21 @@ export function useTodos() {
     []
   );
 
-  const deleteTodo = useCallback((id: string) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  }, []);
+  const deleteTodo = useCallback(
+    (id: string) => {
+      const todoExists = todos.some((todo) => todo.id === id);
+
+      if (!todoExists) {
+        console.error('Failed to delete todo:', new Error('Todo not found'));
+        setError('Failed to delete todo. Please try again.');
+        return;
+      }
+
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+      setError(null);
+    },
+    [todos]
+  );
 
   const toggleTodo = useCallback((id: string) => {
     setTodos((prevTodos) =>
