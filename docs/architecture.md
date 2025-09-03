@@ -2,7 +2,7 @@ Here's the complete fullstack architecture document:
 
 ## Document 3: Fullstack Architecture (save as docs/fullstack-architecture.md)
 
-```markdown
+````markdown
 # Personal Todo Application Fullstack Architecture Document
 
 This document outlines the complete fullstack architecture for Personal Todo Application, including backend systems, frontend implementation, and their integration. It serves as the single source of truth for AI-driven development, ensuring consistency across the entire technology stack.
@@ -18,20 +18,24 @@ This unified approach combines what would traditionally be separate backend and 
 **Rationale:** Provides optimal setup for Next.js latest with App Router, TypeScript configuration, and modern tooling. The official template ensures compatibility with Tailwind 4 and shadcn/ui integration.
 
 **Template Command:**
+
 ```bash
 npx create-next-app@latest personal-todo-app --typescript --tailwind --eslint --app --src-dir
 ```
+````
 
 **Post-template Setup:**
+
 - shadcn/ui initialization following official documentation
 - Tailwind 4 upgrade process
 - Additional TypeScript strict mode configuration
 - Testing framework integration
 
 ### Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial architecture design | Architect Winston |
+
+| Date       | Version | Description                 | Author            |
+| ---------- | ------- | --------------------------- | ----------------- |
+| 2025-09-02 | 1.0     | Initial architecture design | Architect Winston |
 
 ## High Level Architecture
 
@@ -44,6 +48,7 @@ The system employs a modern Jamstack architecture using Next.js App Router for b
 **Platform:** Vercel (optimal Next.js integration)
 
 **Key Services:**
+
 - Vercel Edge Functions for API routes
 - Vercel Analytics for performance monitoring
 - GitHub for version control and deployment triggers
@@ -71,10 +76,10 @@ graph TD
     F --> G[Local Storage Service]
     F --> H[File System Storage]
     D --> I[Local Storage Direct]
-    
+
     J[GitHub Repository] --> K[Vercel Deploy]
     K --> B
-    
+
     style A fill:#e1f5fe
     style B fill:#f3e5f5
     style C fill:#e8f5e8
@@ -84,10 +89,10 @@ graph TD
 
 ### Architectural Patterns
 
-- **Jamstack Architecture:** Static generation with serverless API routes - *Rationale:* Optimal performance and cost for personal productivity app with global availability
-- **Component-Based UI:** Reusable React components with TypeScript - *Rationale:* Maintainability and type safety with shadcn/ui ecosystem
-- **Client-First Data Strategy:** localStorage primary with API backup - *Rationale:* Instant interactions with persistence reliability
-- **Progressive Enhancement:** Core functionality works without JavaScript - *Rationale:* Accessibility and resilience with enhanced interactivity
+- **Jamstack Architecture:** Static generation with serverless API routes - _Rationale:_ Optimal performance and cost for personal productivity app with global availability
+- **Component-Based UI:** Reusable React components with TypeScript - _Rationale:_ Maintainability and type safety with shadcn/ui ecosystem
+- **Client-First Data Strategy:** localStorage primary with API backup - _Rationale:_ Instant interactions with persistence reliability
+- **Progressive Enhancement:** Core functionality works without JavaScript - _Rationale:_ Accessibility and resilience with enhanced interactivity
 
 ## Tech Stack
 
@@ -95,29 +100,29 @@ This is the DEFINITIVE technology selection for the entire project. All developm
 
 ### Technology Stack Table
 
-| Category | Technology | Version | Purpose | Rationale |
-|----------|------------|---------|---------|-----------|
-| Frontend Language | TypeScript | 5.3.3 | Type-safe development | Enhanced developer experience and runtime error prevention |
-| Frontend Framework | Next.js | 15.0.0 | Full-stack React framework | App Router, built-in optimization, Vercel integration |
-| UI Component Library | shadcn/ui | Latest | Design system components | Accessible components with Tailwind integration |
-| State Management | React Built-in | 18.3.1 | Local component state | Sufficient for simple todo app, avoid over-engineering |
-| Backend Language | TypeScript | 5.3.3 | API route development | Shared types across frontend and backend |
-| Backend Framework | Next.js API Routes | 15.0.0 | Serverless API endpoints | Integrated with frontend, optimal for simple persistence |
-| API Style | REST | N/A | HTTP endpoints | Simple CRUD operations, well-understood patterns |
-| Database | localStorage + JSON Files | Native | Data persistence | Instant client access with server backup option |
-| Cache | Browser Cache | Native | Asset caching | Built-in browser caching with Vercel CDN |
-| File Storage | Vercel File System | N/A | Server-side backup | Simple file-based persistence for backup |
-| Authentication | None (Phase 1) | N/A | No auth initially | Single-user personal app, auth in future phases |
-| Frontend Testing | Vitest + Testing Library | 2.0.5 | Component testing | Fast, modern testing with React component support |
-| Backend Testing | Vitest | 2.0.5 | API route testing | Unified testing framework across stack |
-| E2E Testing | Playwright | 1.40.0 | End-to-end testing | Cross-browser testing with accessibility features |
-| Build Tool | Next.js | 15.0.0 | Build optimization | Integrated build with automatic optimizations |
-| Bundler | Turbopack | Latest | Fast bundling | Next.js default, faster than Webpack |
-| IaC Tool | Vercel CLI | Latest | Deployment automation | Infrastructure defined in vercel.json |
-| CI/CD | GitHub Actions | Latest | Automated deployment | Integrated with Vercel deployment |
-| Monitoring | Vercel Analytics | Latest | Performance monitoring | Built-in real user monitoring |
-| Logging | Console + Vercel Logs | Native | Error tracking | Simple logging with Vercel log aggregation |
-| CSS Framework | Tailwind CSS | 4.0.0 | Utility-first styling | Modern styling with shadcn/ui compatibility |
+| Category             | Technology                | Version | Purpose                    | Rationale                                                  |
+| -------------------- | ------------------------- | ------- | -------------------------- | ---------------------------------------------------------- |
+| Frontend Language    | TypeScript                | 5.3.3   | Type-safe development      | Enhanced developer experience and runtime error prevention |
+| Frontend Framework   | Next.js                   | 15.0.0  | Full-stack React framework | App Router, built-in optimization, Vercel integration      |
+| UI Component Library | shadcn/ui                 | Latest  | Design system components   | Accessible components with Tailwind integration            |
+| State Management     | React Built-in            | 18.3.1  | Local component state      | Sufficient for simple todo app, avoid over-engineering     |
+| Backend Language     | TypeScript                | 5.3.3   | API route development      | Shared types across frontend and backend                   |
+| Backend Framework    | Next.js API Routes        | 15.0.0  | Serverless API endpoints   | Integrated with frontend, optimal for simple persistence   |
+| API Style            | REST                      | N/A     | HTTP endpoints             | Simple CRUD operations, well-understood patterns           |
+| Database             | localStorage + JSON Files | Native  | Data persistence           | Instant client access with server backup option            |
+| Cache                | Browser Cache             | Native  | Asset caching              | Built-in browser caching with Vercel CDN                   |
+| File Storage         | Vercel File System        | N/A     | Server-side backup         | Simple file-based persistence for backup                   |
+| Authentication       | None (Phase 1)            | N/A     | No auth initially          | Single-user personal app, auth in future phases            |
+| Frontend Testing     | Vitest + Testing Library  | 2.0.5   | Component testing          | Fast, modern testing with React component support          |
+| Backend Testing      | Vitest                    | 2.0.5   | API route testing          | Unified testing framework across stack                     |
+| E2E Testing          | Playwright                | 1.40.0  | End-to-end testing         | Cross-browser testing with accessibility features          |
+| Build Tool           | Next.js                   | 15.0.0  | Build optimization         | Integrated build with automatic optimizations              |
+| Bundler              | Turbopack                 | Latest  | Fast bundling              | Next.js default, faster than Webpack                       |
+| IaC Tool             | Vercel CLI                | Latest  | Deployment automation      | Infrastructure defined in vercel.json                      |
+| CI/CD                | GitHub Actions            | Latest  | Automated deployment       | Integrated with Vercel deployment                          |
+| Monitoring           | Vercel Analytics          | Latest  | Performance monitoring     | Built-in real user monitoring                              |
+| Logging              | Console + Vercel Logs     | Native  | Error tracking             | Simple logging with Vercel log aggregation                 |
+| CSS Framework        | Tailwind CSS              | 4.0.0   | Utility-first styling      | Modern styling with shadcn/ui compatibility                |
 
 ## Data Models
 
@@ -126,6 +131,7 @@ This is the DEFINITIVE technology selection for the entire project. All developm
 **Purpose:** Core entity representing individual todo items with completion tracking and metadata
 
 **Key Attributes:**
+
 - id: string (UUID) - Unique identifier for persistence and React keys
 - text: string - The todo content, max 500 characters
 - completed: boolean - Completion status for UI state and filtering
@@ -160,6 +166,7 @@ interface TodoStorageState {
 ```
 
 #### Relationships
+
 - Self-contained entity with no relationships in MVP
 - Future relationships: categories, tags, user association
 
@@ -273,7 +280,7 @@ components:
         updatedAt:
           type: string
           format: date-time
-    
+
     TodoCreateInput:
       type: object
       required: [text]
@@ -282,7 +289,7 @@ components:
           type: string
           minLength: 1
           maxLength: 500
-    
+
     TodoUpdateInput:
       type: object
       properties:
@@ -292,7 +299,7 @@ components:
           maxLength: 500
         completed:
           type: boolean
-    
+
     Error:
       type: object
       properties:
@@ -312,6 +319,7 @@ components:
 **Responsibility:** Root application component managing global state and coordinating all todo operations
 
 **Key Interfaces:**
+
 - Props: None (root component)
 - State: TodoStorageState management
 - Events: CRUD operations through localStorage service
@@ -325,6 +333,7 @@ components:
 **Responsibility:** Display todo items with responsive layout and empty state management
 
 **Key Interfaces:**
+
 - Props: todos[], onToggle, onEdit, onDelete functions
 - Events: User interactions forwarded to parent
 - ARIA: Live region announcements for accessibility
@@ -338,6 +347,7 @@ components:
 **Responsibility:** Individual todo display with inline editing, completion toggle, and deletion
 
 **Key Interfaces:**
+
 - Props: todo object, event handlers for actions
 - State: Local editing state management
 - Events: onToggle, onEdit, onDelete with keyboard support
@@ -351,6 +361,7 @@ components:
 **Responsibility:** New todo creation with validation and keyboard shortcuts
 
 **Key Interfaces:**
+
 - Props: onAdd function, loading state
 - State: Input value and validation state
 - Events: Form submission with Enter key support
@@ -364,6 +375,7 @@ components:
 **Responsibility:** Data persistence layer handling localStorage and API backup synchronization
 
 **Key Interfaces:**
+
 - Methods: CRUD operations returning Promise<Todo>
 - Events: Storage events for cross-tab synchronization
 - Error handling: Graceful fallbacks for storage failures
@@ -383,10 +395,10 @@ graph TD
     E --> F[localStorage]
     E --> G[API Routes]
     G --> H[File System]
-    
+
     I[ErrorBoundary] --> A
     J[Layout] --> A
-    
+
     style A fill:#e3f2fd
     style E fill:#f3e5f5
     style F fill:#fff3e0
@@ -398,6 +410,7 @@ graph TD
 No external APIs required for MVP. The application is self-contained with local data persistence.
 
 **Future Considerations:**
+
 - Potential integration with calendar APIs for due date features
 - Cloud storage providers for cross-device sync
 - Analytics services for usage insights
@@ -412,7 +425,7 @@ sequenceDiagram
     participant StorageService
     participant localStorage
     participant APIRoute
-    
+
     User->>TodoInput: Type new todo
     User->>TodoInput: Press Enter
     TodoInput->>TodoApp: onAdd(text)
@@ -423,7 +436,7 @@ sequenceDiagram
     StorageService-->>TodoApp: New todo
     TodoApp-->>TodoInput: Clear input & focus
     TodoApp->>TodoList: Update display
-    
+
     Note over User,APIRoute: Optimistic updates with localStorage priority
 ```
 
@@ -488,6 +501,7 @@ personal-todo-app/
 ### Local Development Setup
 
 #### Prerequisites
+
 ```bash
 # Verify Node.js version (20+ required for Next.js latest)
 node --version
@@ -497,6 +511,7 @@ npm --version
 ```
 
 #### Initial Setup
+
 ```bash
 # Clone repository
 git clone <repository-url>
@@ -516,6 +531,7 @@ cp .env.example .env.local
 ```
 
 #### Development Commands
+
 ```bash
 # Start development server
 npm run dev
@@ -567,12 +583,14 @@ NEXT_PUBLIC_VERCEL_ANALYTICS_ID=""
 ### Deployment Strategy
 
 **Frontend Deployment:**
+
 - **Platform:** Vercel Edge Network
 - **Build Command:** `npm run build`
 - **Output Directory:** `.next` (Next.js default)
 - **CDN/Edge:** Automatic global distribution via Vercel Edge
 
 **Backend Deployment:**
+
 - **Platform:** Vercel Serverless Functions
 - **Build Command:** `npm run build` (includes API routes)
 - **Deployment Method:** Serverless functions auto-deployed with frontend
@@ -598,19 +616,19 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Type check
         run: npm run type-check
-      
+
       - name: Lint
         run: npm run lint
-      
+
       - name: Unit tests
         run: npm test
-      
+
       - name: E2E tests
         run: npm run test:e2e
 
@@ -631,11 +649,11 @@ jobs:
 
 ### Environments
 
-| Environment | Frontend URL | Backend URL | Purpose |
-|-------------|-------------|-------------|---------|
-| Development | http://localhost:3000 | http://localhost:3000/api | Local development |
-| Preview | https://pr-123-personal-todo.vercel.app | https://pr-123-personal-todo.vercel.app/api | PR preview testing |
-| Production | https://personal-todo.vercel.app | https://personal-todo.vercel.app/api | Live environment |
+| Environment | Frontend URL                            | Backend URL                                 | Purpose            |
+| ----------- | --------------------------------------- | ------------------------------------------- | ------------------ |
+| Development | http://localhost:3000                   | http://localhost:3000/api                   | Local development  |
+| Preview     | https://pr-123-personal-todo.vercel.app | https://pr-123-personal-todo.vercel.app/api | PR preview testing |
+| Production  | https://personal-todo.vercel.app        | https://personal-todo.vercel.app/api        | Live environment   |
 
 ## Frontend Architecture
 
@@ -759,7 +777,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*']
+  matcher: ['/dashboard/:path*'],
 };
 ```
 
@@ -808,9 +826,9 @@ export class TodoService {
       // Try localStorage first
       const local = this.getFromLocalStorage();
       if (local.length > 0) return local;
-      
+
       // Fallback to API
-      const response = await apiClient.get<{todos: Todo[]}>('/todos');
+      const response = await apiClient.get<{ todos: Todo[] }>('/todos');
       return response.todos;
     } catch (error) {
       console.error('Failed to load todos:', error);
@@ -829,10 +847,10 @@ export class TodoService {
 
     // Optimistic update to localStorage
     this.saveToLocalStorage(todo);
-    
+
     // Background sync to API (don't await)
     this.syncToApi('create', todo).catch(console.error);
-    
+
     return todo;
   }
 }
@@ -865,17 +883,14 @@ import { validateTodoInput } from '@/lib/validations';
 export async function GET() {
   try {
     const todos = await TodoService.getAll();
-    return NextResponse.json({ 
-      todos, 
+    return NextResponse.json({
+      todos,
       count: todos.length,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('GET /api/todos error:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch todos' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch todos' }, { status: 500 });
   }
 }
 
@@ -883,7 +898,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validation = validateTodoInput(body);
-    
+
     if (!validation.success) {
       return NextResponse.json(
         { error: 'Invalid input', details: validation.errors },
@@ -895,10 +910,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(todo, { status: 201 });
   } catch (error) {
     console.error('POST /api/todos error:', error);
-    return NextResponse.json(
-      { error: 'Failed to create todo' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create todo' }, { status: 500 });
   }
 }
 ```
@@ -947,7 +959,7 @@ export class StorageService {
     try {
       const data = localStorage.getItem(this.STORAGE_KEY);
       if (!data) return [];
-      
+
       const parsed = JSON.parse(data);
       return parsed.todos || [];
     } catch (error) {
@@ -964,13 +976,13 @@ export class StorageService {
         todos,
         metadata: {
           totalCount: todos.length,
-          completedCount: todos.filter(t => t.completed).length,
-          createdToday: todos.filter(t => 
-            new Date(t.createdAt).toDateString() === new Date().toDateString()
+          completedCount: todos.filter((t) => t.completed).length,
+          createdToday: todos.filter(
+            (t) => new Date(t.createdAt).toDateString() === new Date().toDateString()
           ).length,
-        }
+        },
       };
-      
+
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storageData));
     } catch (error) {
       console.error('localStorage write error:', error);
@@ -1005,7 +1017,7 @@ sequenceDiagram
     participant App
     participant Auth0
     participant API
-    
+
     User->>App: Visit application
     App->>Auth0: Check authentication
     Auth0-->>App: Not authenticated
@@ -1035,16 +1047,19 @@ export function middleware(request: NextRequest) {
 ### Security Requirements
 
 **Frontend Security:**
+
 - CSP Headers: Strict content security policy preventing XSS
 - XSS Prevention: Input sanitization and output encoding
 - Secure Storage: localStorage with validation, no sensitive data
 
 **Backend Security:**
+
 - Input Validation: Comprehensive validation using Zod schemas
 - Rate Limiting: API route protection (100 requests/minute per IP)
 - CORS Policy: Restricted to application domain
 
 **Authentication Security:**
+
 - Token Storage: Not applicable for MVP (future: secure httpOnly cookies)
 - Session Management: Not applicable for MVP
 - Password Policy: Not applicable for MVP
@@ -1052,11 +1067,13 @@ export function middleware(request: NextRequest) {
 ### Performance Optimization
 
 **Frontend Performance:**
+
 - Bundle Size Target: Under 100KB gzipped for initial bundle
 - Loading Strategy: Static generation with incremental static regeneration
 - Caching Strategy: Browser cache with stale-while-revalidate for static assets
 
 **Backend Performance:**
+
 - Response Time Target: Under 100ms for API routes
 - Database Optimization: Efficient localStorage operations with debouncing
 - Caching Strategy: Memory caching for frequently accessed data
@@ -1133,19 +1150,19 @@ const mockTodo = {
 test('toggles completion when checkbox clicked', () => {
   const onToggle = vi.fn();
   render(<TodoItem todo={mockTodo} onToggle={onToggle} />);
-  
+
   const checkbox = screen.getByRole('checkbox');
   fireEvent.click(checkbox);
-  
+
   expect(onToggle).toHaveBeenCalledWith('1');
 });
 
 test('enters edit mode when text clicked', () => {
   render(<TodoItem todo={mockTodo} />);
-  
+
   const text = screen.getByText('Test todo');
   fireEvent.click(text);
-  
+
   expect(screen.getByDisplayValue('Test todo')).toBeInTheDocument();
 });
 ```
@@ -1160,7 +1177,7 @@ import { NextRequest } from 'next/server';
 test('GET /api/todos returns todo list', async () => {
   const response = await GET();
   const data = await response.json();
-  
+
   expect(response.status).toBe(200);
   expect(data).toHaveProperty('todos');
   expect(data).toHaveProperty('count');
@@ -1171,10 +1188,10 @@ test('POST /api/todos creates new todo', async () => {
     method: 'POST',
     body: JSON.stringify({ text: 'New todo' }),
   });
-  
+
   const response = await POST(request);
   const data = await response.json();
-  
+
   expect(response.status).toBe(201);
   expect(data.text).toBe('New todo');
   expect(data.completed).toBe(false);
@@ -1189,20 +1206,20 @@ import { test, expect } from '@playwright/test';
 
 test('complete todo workflow', async ({ page }) => {
   await page.goto('/');
-  
+
   // Add todo
   await page.fill('[data-testid="todo-input"]', 'Buy groceries');
   await page.press('[data-testid="todo-input"]', 'Enter');
-  
+
   // Verify todo appears
   await expect(page.getByText('Buy groceries')).toBeVisible();
-  
+
   // Complete todo
   await page.click('[data-testid="todo-checkbox-1"]');
-  
+
   // Verify completion styling
   await expect(page.locator('[data-testid="todo-1"]')).toHaveClass(/completed/);
-  
+
   // Test accessibility
   await page.keyboard.press('Tab');
   await expect(page.locator(':focus')).toBeVisible();
@@ -1220,14 +1237,14 @@ sequenceDiagram
     participant StorageService
     participant ErrorBoundary
     participant Toast
-    
+
     User->>Component: Action (add/edit/delete)
     Component->>StorageService: Execute operation
     StorageService-->>Component: Error
     Component->>ErrorBoundary: Catch component error
     ErrorBoundary->>Toast: Display user message
     Toast->>User: "Something went wrong, please try again"
-    
+
     Note over Component,StorageService: Local operations prioritized for resilience
 ```
 
@@ -1260,23 +1277,23 @@ const ErrorCodes = {
 export class ErrorHandler {
   static handleStorageError(error: unknown): string {
     if (error instanceof StorageError) {
-      return "Unable to save changes. Your todos are backed up locally.";
+      return 'Unable to save changes. Your todos are backed up locally.';
     }
-    return "Something went wrong. Please refresh and try again.";
+    return 'Something went wrong. Please refresh and try again.';
   }
 
   static handleApiError(error: unknown): string {
     if (error instanceof ApiError) {
       switch (error.code) {
         case 'VALIDATION_ERROR':
-          return "Please check your input and try again.";
+          return 'Please check your input and try again.';
         case 'NOT_FOUND':
-          return "This todo no longer exists.";
+          return 'This todo no longer exists.';
         default:
-          return "Unable to sync with server. Changes saved locally.";
+          return 'Unable to sync with server. Changes saved locally.';
       }
     }
-    return "An unexpected error occurred.";
+    return 'An unexpected error occurred.';
   }
 }
 ```
@@ -1285,23 +1302,21 @@ export class ErrorHandler {
 
 ```typescript
 // lib/api-error-handler.ts
-export function withErrorHandling<T extends any[], R>(
-  handler: (...args: T) => Promise<R>
-) {
+export function withErrorHandling<T extends any[], R>(handler: (...args: T) => Promise<R>) {
   return async (...args: T): Promise<NextResponse> => {
     try {
       const result = await handler(...args);
       return NextResponse.json(result);
     } catch (error) {
       console.error('API Error:', error);
-      
+
       if (error instanceof ValidationError) {
         return NextResponse.json(
           { error: 'VALIDATION_ERROR', message: error.message },
           { status: 400 }
         );
       }
-      
+
       return NextResponse.json(
         { error: 'SERVER_ERROR', message: 'Internal server error' },
         { status: 500 }
@@ -1323,12 +1338,14 @@ export function withErrorHandling<T extends any[], R>(
 ### Key Metrics
 
 **Frontend Metrics:**
+
 - Core Web Vitals (LCP, FID, CLS)
 - JavaScript errors and component failures
 - Todo operation success rates
 - User interaction patterns and efficiency
 
 **Backend Metrics:**
+
 - API route response times
 - Error rates by endpoint
 - Function execution duration
@@ -1349,14 +1366,14 @@ export function withErrorHandling<T extends any[], R>(
 
 ### Naming Conventions
 
-| Element | Frontend | Backend | Example |
-|---------|----------|---------|---------|
-| Components | PascalCase | - | `TodoItem.tsx` |
-| Hooks | camelCase with 'use' | - | `useTodos.ts` |
-| API Routes | - | kebab-case | `/api/todos` |
-| Database Tables | - | snake_case | `todos` (future) |
-| Files | kebab-case | kebab-case | `todo-service.ts` |
-| Interfaces | PascalCase | PascalCase | `TodoCreateInput` |
+| Element         | Frontend             | Backend    | Example           |
+| --------------- | -------------------- | ---------- | ----------------- |
+| Components      | PascalCase           | -          | `TodoItem.tsx`    |
+| Hooks           | camelCase with 'use' | -          | `useTodos.ts`     |
+| API Routes      | -                    | kebab-case | `/api/todos`      |
+| Database Tables | -                    | snake_case | `todos` (future)  |
+| Files           | kebab-case           | kebab-case | `todo-service.ts` |
+| Interfaces      | PascalCase           | PascalCase | `TodoCreateInput` |
 
 ## Error Handling Strategy
 
@@ -1379,17 +1396,20 @@ export function withErrorHandling<T extends any[], R>(
 ### Error Handling Patterns
 
 #### External API Errors
+
 - **Retry Policy:** 3 retries with exponential backoff for network errors
 - **Circuit Breaker:** Not needed for localStorage-first approach
 - **Timeout Configuration:** 5 second timeout for API backup operations
 - **Error Translation:** Convert API errors to user-friendly messages
 
 #### Business Logic Errors
+
 - **Custom Exceptions:** ValidationError, StorageError, NotFoundError
 - **User-Facing Errors:** Plain language messages with recovery suggestions
 - **Error Codes:** Standardized codes for different error types
 
 #### Data Consistency
+
 - **Transaction Strategy:** Optimistic updates with rollback on failure
 - **Compensation Logic:** Restore previous state if operations fail
 - **Idempotency:** Safe to retry operations without side effects
@@ -1407,12 +1427,13 @@ export function withErrorHandling<T extends any[], R>(
 #### Unit Tests
 
 - **Framework:** Vitest 2.0.5
-- **File Convention:** *.test.ts, *.test.tsx
-- **Location:** Co-located with source files in __tests__ directories
+- **File Convention:** _.test.ts, _.test.tsx
+- **Location:** Co-located with source files in **tests** directories
 - **Mocking Library:** vi.mock from Vitest
 - **Coverage Requirement:** 80% for services, 60% for components
 
 **AI Agent Requirements:**
+
 - Generate tests for all public methods
 - Cover edge cases and error conditions
 - Follow AAA pattern (Arrange, Act, Assert)
@@ -1469,6 +1490,8 @@ The architecture is complete and saved as docs/fullstack-architecture.md. Please
 - Development workflow clarity for AI agent implementation
 
 The architecture supports all PRD requirements while maintaining focus on simplicity and personal productivity goals.
+
 ```
 
 This is the complete, comprehensive fullstack architecture document ready to save as `docs/fullstack-architecture.md`. It includes all the technical details needed for implementation, from the technology stack and component architecture to testing strategies and deployment configuration.
+```
