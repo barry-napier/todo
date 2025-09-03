@@ -8,6 +8,7 @@ import {
 } from '@/types/todo';
 import { localStorageService } from './localStorage';
 import { validateTodoInput, sanitizeTodoText } from '@/lib/utils/validation';
+import { StorageError, ValidationError } from '@/lib/errors';
 
 export class TodoService {
   private inMemoryFallback: Todo[] = [];
@@ -25,7 +26,7 @@ export class TodoService {
     // Validate and sanitize input
     const validation = validateTodoInput(input);
     if (!validation.isValid) {
-      throw new Error(validation.error || 'Invalid todo input');
+      throw new ValidationError(validation.error || 'Invalid todo input', 'text');
     }
 
     const sanitizedText = sanitizeTodoText(input.text);
@@ -91,7 +92,7 @@ export class TodoService {
     const todoIndex = todos.findIndex((t) => t.id === id);
 
     if (todoIndex === -1) {
-      throw new Error(`Todo with id ${id} not found`);
+      throw new ValidationError(`Todo with id ${id} not found`);
     }
 
     const todo = todos[todoIndex];
@@ -100,7 +101,7 @@ export class TodoService {
     if (input.text !== undefined) {
       const validation = validateTodoInput({ text: input.text });
       if (!validation.isValid) {
-        throw new Error(validation.error || 'Invalid todo input');
+        throw new ValidationError(validation.error || 'Invalid todo input', 'text');
       }
       todo.text = sanitizeTodoText(input.text);
     }
@@ -146,16 +147,27 @@ export class TodoService {
         };
         localStorageService.save(state);
       } catch (error) {
-        // Fallback to in-memory if save fails
+        // Handle StorageError specifically
+        if (error instanceof StorageError) {
+          // Try to save pending sync
+          localStorageService.savePendingSync(todos);
+
+          // Fallback to in-memory
+          console.error('Storage error, using in-memory fallback:', error);
+          this.useInMemory = true;
+          this.inMemoryFallback = todos;
+
+          throw error; // Re-throw the StorageError with its recoverable flag
+        }
+
+        // Fallback to in-memory for other errors
         console.error('Failed to save to localStorage, using in-memory fallback:', error);
         this.useInMemory = true;
         this.inMemoryFallback = todos;
 
-        // Re-throw with user-friendly message
-        if (error instanceof Error && error.message.includes('quota')) {
-          throw new Error('Storage quota exceeded. Your todos are temporarily saved in memory.');
-        }
-        throw error;
+        throw new StorageError(
+          'Failed to save changes. Your todos are temporarily saved in memory.'
+        );
       }
     }
   }
