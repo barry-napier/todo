@@ -16,13 +16,11 @@ describe('LoadingSpinner', () => {
 
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
 
-    act(() => {
-      vi.advanceTimersByTime(200);
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(200);
     });
 
-    await waitFor(() => {
-      expect(screen.getByRole('status')).toBeInTheDocument();
-    });
+    expect(screen.getByRole('status')).toBeInTheDocument();
 
     vi.useRealTimers();
   });
