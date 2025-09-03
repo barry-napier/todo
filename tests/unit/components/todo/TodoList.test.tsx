@@ -43,8 +43,8 @@ describe('TodoList', () => {
     );
 
     const todoTexts = screen.getAllByRole('checkbox').map((checkbox) => {
-      const label = checkbox.closest('div')?.querySelector('label');
-      return label?.textContent;
+      const textElement = checkbox.closest('.flex')?.querySelector('span.flex-1');
+      return textElement?.textContent;
     });
 
     expect(todoTexts[0]).toBe('Third todo');
