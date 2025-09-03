@@ -40,13 +40,6 @@ export default function Home() {
       ) : (
         <TodoList todos={todos} onToggle={toggleTodo} onDelete={deleteTodo} onUpdate={updateTodo} />
       )}
-
-      {!isLoading && todos.length > 0 && (
-        <div className="text-center text-sm text-muted-foreground pt-4 border-t">
-          {todos.filter((t) => !t.completed).length} active,{' '}
-          {todos.filter((t) => t.completed).length} completed
-        </div>
-      )}
     </div>
   );
 }

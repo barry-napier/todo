@@ -2,7 +2,7 @@
 
 ## Status
 
-Draft
+Ready for Review
 
 ## Story
 
@@ -21,43 +21,43 @@ Draft
 
 ## Tasks / Subtasks
 
-- [ ] Create TodoList component (AC: 1, 2, 5)
-  - [ ] Create `/src/components/todo/TodoList.tsx`
-  - [ ] Implement todo mapping logic
-  - [ ] Sort todos by createdAt (newest first)
-  - [ ] Add empty state component
-- [ ] Create TodoItem component (AC: 2, 3)
-  - [ ] Create `/src/components/todo/TodoItem.tsx`
-  - [ ] Display todo text with proper styling
-  - [ ] Apply strikethrough for completed todos
-  - [ ] Add hover states for interactive elements
-- [ ] Implement todo count indicator (AC: 6)
-  - [ ] Show total todo count
-  - [ ] Show completed vs active count
-  - [ ] Position above or below list
-- [ ] Add animations (AC: 4)
-  - [ ] Implement fade-in for new todos
-  - [ ] Add slide-out for deleted todos
-  - [ ] Use CSS transitions for smooth effects
-  - [ ] Consider framer-motion if needed
-- [ ] Create empty state (AC: 5)
-  - [ ] Design friendly empty message
-  - [ ] Add illustration or icon
-  - [ ] Include call-to-action to add first todo
-- [ ] Connect to todo state (AC: 1)
-  - [ ] Use useTodos hook from Story 2.1
-  - [ ] Load todos from localStorage on mount
-  - [ ] Handle loading and error states
-- [ ] Style components (AC: 2, 3)
-  - [ ] Use Card component from shadcn/ui
-  - [ ] Apply consistent spacing
-  - [ ] Ensure responsive layout
-- [ ] Write unit tests (AC: 1-6)
-  - [ ] Test TodoList renders todos correctly
-  - [ ] Test sorting by date
-  - [ ] Test empty state display
-  - [ ] Test completed todo styling
-  - [ ] Test todo count accuracy
+- [x] Create TodoList component (AC: 1, 2, 5)
+  - [x] Create `/src/components/todo/TodoList.tsx`
+  - [x] Implement todo mapping logic
+  - [x] Sort todos by createdAt (newest first)
+  - [x] Add empty state component
+- [x] Create TodoItem component (AC: 2, 3)
+  - [x] Create `/src/components/todo/TodoItem.tsx`
+  - [x] Display todo text with proper styling
+  - [x] Apply strikethrough for completed todos
+  - [x] Add hover states for interactive elements
+- [x] Implement todo count indicator (AC: 6)
+  - [x] Show total todo count
+  - [x] Show completed vs active count
+  - [x] Position above or below list
+- [x] Add animations (AC: 4)
+  - [x] Implement fade-in for new todos
+  - [x] Add slide-out for deleted todos
+  - [x] Use CSS transitions for smooth effects
+  - [x] Consider framer-motion if needed
+- [x] Create empty state (AC: 5)
+  - [x] Design friendly empty message
+  - [x] Add illustration or icon
+  - [x] Include call-to-action to add first todo
+- [x] Connect to todo state (AC: 1)
+  - [x] Use useTodos hook from Story 2.1
+  - [x] Load todos from localStorage on mount
+  - [x] Handle loading and error states
+- [x] Style components (AC: 2, 3)
+  - [x] Use Card component from shadcn/ui
+  - [x] Apply consistent spacing
+  - [x] Ensure responsive layout
+- [x] Write unit tests (AC: 1-6)
+  - [x] Test TodoList renders todos correctly
+  - [x] Test sorting by date
+  - [x] Test empty state display
+  - [x] Test completed todo styling
+  - [x] Test todo count accuracy
 
 ## Dev Notes
 
@@ -151,24 +151,44 @@ Use CSS transitions for performance:
 | Date       | Version | Description            | Author       |
 | ---------- | ------- | ---------------------- | ------------ |
 | 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
+| 2025-09-03 | 1.1     | Story completed        | Dev Agent    |
 
 ## Dev Agent Record
 
 ### Agent Model Used
 
-_To be filled by Dev Agent_
+Claude Opus 4.1 (claude-opus-4-1-20250805)
 
 ### Debug Log References
 
-_To be filled by Dev Agent_
+- Enhanced TodoList component with sorting by createdAt (newest first)
+- Added improved empty state with CheckCircle icon from lucide-react
+- Implemented todo count indicator with active/completed counts
+- Added CSS animations (fade-in, slide-out) for smooth transitions
+- Fixed test failure with cancel button preventing onBlur save
 
 ### Completion Notes List
 
-_To be filled by Dev Agent_
+1. Successfully implemented chronological sorting (newest first) using useMemo for performance
+2. Enhanced empty state with icon and friendly messaging
+3. Added comprehensive todo count indicator showing total, active, and completed counts
+4. Implemented smooth animations using CSS keyframes and transitions
+5. Fixed edit mode cancel button to properly prevent onBlur save event
+6. All unit tests passing (104 tests total, 12 test files)
 
 ### File List
 
-_To be filled by Dev Agent_
+**Modified Files:**
+
+- `/src/components/todo/TodoList.tsx` - Enhanced with sorting, counts, and better empty state
+- `/src/components/todo/TodoItem.tsx` - Added slide-out animation for deletion
+- `/src/app/page.tsx` - Removed duplicate todo count (now in TodoList)
+- `/src/app/globals.css` - Added CSS animations (fade-in, slide-out)
+- `/tests/unit/components/todo/TodoList.test.tsx` - Updated comprehensive tests
+
+**Created Files:**
+
+- `/tests/unit/components/todo/TodoItem.test.tsx` - Complete test coverage for TodoItem
 
 ## QA Results
 
