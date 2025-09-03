@@ -424,7 +424,7 @@ function ProgressIndicator({ current, total, operation }: ProgressProps) {
 ## Dev Agent Record
 
 ### Tasks Completed
-- [x] Install framer-motion dependency  
+- [x] Install framer-motion dependency
 - [x] Create animation constants configuration
 - [x] Implement TodoListSkeleton component
 - [x] Create LoadingSpinner component

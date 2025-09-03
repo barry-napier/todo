@@ -166,6 +166,9 @@ describe('SyncService', () => {
       // Create new service after setting offline status
       const offlineService = new SyncService();
 
+      // Create new service after setting offline status
+      const offlineService = new SyncService();
+
       const todos = [
         {
           id: '1',

@@ -50,11 +50,14 @@ describe('ErrorBoundary', () => {
       return <ThrowError shouldThrow={shouldThrow} />;
     };
     
-    const { rerender } = render(
+    render(
       <ErrorBoundary>
         <TestComponent />
       </ErrorBoundary>
     );
+
+    // Remove unused variable warning by commenting out
+    // const rerender was available if needed
 
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
 
@@ -90,13 +93,14 @@ describe('ErrorBoundary', () => {
   });
 
   it('should show error details in development mode', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'development';
+    // const originalEnv = process.env.NODE_ENV; // Not used in this test
+    // Mock NODE_ENV using vi
+    vi.stubEnv('NODE_ENV', 'development');
 
     const errorWithStack = new Error('Test error with stack');
     errorWithStack.stack = 'Error: Test error with stack\n  at TestComponent';
 
-    function ThrowWithStack() {
+    function ThrowWithStack(): never {
       throw errorWithStack;
     }
 
@@ -113,12 +117,14 @@ describe('ErrorBoundary', () => {
 
     expect(screen.getAllByText(/Test error with stack/)[0]).toBeInTheDocument();
 
-    process.env.NODE_ENV = originalEnv;
+    // Restore original env
+    vi.unstubAllEnvs();
   });
 
   it('should not show error details in production mode', () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = 'production';
+    // const originalEnv = process.env.NODE_ENV; // Not used in this test
+    // Mock NODE_ENV using vi
+    vi.stubEnv('NODE_ENV', 'production');
 
     render(
       <ErrorBoundary>
@@ -128,13 +134,14 @@ describe('ErrorBoundary', () => {
 
     expect(screen.queryByText('Error details (development only)')).not.toBeInTheDocument();
 
-    process.env.NODE_ENV = originalEnv;
+    // Restore original env
+    vi.unstubAllEnvs();
   });
 
   it('should navigate to home on Go Home button click', () => {
     const originalLocation = window.location;
     delete (window as { location?: Location }).location;
-    window.location = { ...originalLocation, href: '' };
+    window.location = { ...originalLocation, href: '' } as Location & string;
 
     render(
       <ErrorBoundary>
@@ -146,6 +153,6 @@ describe('ErrorBoundary', () => {
 
     expect(window.location.href).toBe('/');
 
-    window.location = originalLocation;
+    window.location = originalLocation as Location & string;
   });
 });
