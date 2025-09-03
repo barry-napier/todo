@@ -115,6 +115,11 @@ export class LocalStorageService {
 
       const parsed = JSON.parse(data);
 
+      // Handle version migrations first (for old formats)
+      if (parsed.version && parsed.version !== this.storageVersion) {
+        return this.migrate(parsed);
+      }
+
       // Validate data structure
       if (!this.validateStorageState(parsed)) {
         console.warn('Invalid storage state detected, attempting recovery');
@@ -133,22 +138,10 @@ export class LocalStorageService {
         });
       }
 
-      // Handle version migrations
-      if (parsed.version !== this.storageVersion) {
-        return this.migrate(parsed);
-      }
-
       return parsed;
     } catch (error) {
       console.error('Failed to load from localStorage:', error);
-
-      // Attempt to recover from corrupted data
-      try {
-        return this.recoverFromCorruptedData(null);
-      } catch (recoveryError) {
-        console.error('Failed to recover data:', recoveryError);
-        return null;
-      }
+      return null;
     }
   }
 

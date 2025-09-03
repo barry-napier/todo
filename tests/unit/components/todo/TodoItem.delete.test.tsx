@@ -24,6 +24,9 @@ describe('TodoItem - Delete Functionality', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.useRealTimers();
+    // Clean up any lingering announcements
+    document.querySelectorAll('[role="status"]').forEach(el => el.remove());
   });
 
   it('should render delete button', () => {
@@ -130,6 +133,7 @@ describe('TodoItem - Delete Functionality', () => {
   });
 
   it('should create screen reader announcement for deletion', async () => {
+    vi.useFakeTimers();
     vi.spyOn(window, 'confirm').mockImplementation(() => true);
 
     render(
@@ -144,24 +148,24 @@ describe('TodoItem - Delete Functionality', () => {
     const deleteButton = screen.getByLabelText(`Delete "${testTodo.text}"`);
     fireEvent.click(deleteButton);
 
-    // Wait for announcement to be created
-    await waitFor(() => {
-      const announcement = document.querySelector('[role="status"][aria-live="polite"]');
-      expect(announcement).toBeInTheDocument();
-      expect(announcement).toHaveTextContent(`Deleting todo: ${testTodo.text}`);
-    });
+    // Check immediately after click - announcement should be created synchronously
+    const initialAnnouncement = document.querySelector('[role="status"][aria-live="polite"]');
+    expect(initialAnnouncement).toBeInTheDocument();
+    expect(initialAnnouncement).toHaveTextContent(`Deleting todo: ${testTodo.text}`);
 
-    // Wait for deletion to complete and announcement to update
-    await waitFor(
-      () => {
-        const announcement = document.querySelector('[role="status"][aria-live="polite"]');
-        expect(announcement).toHaveTextContent(`Todo deleted: ${testTodo.text}`);
-      },
-      { timeout: 400 }
-    );
+    // Advance timers to trigger the deletion
+    await vi.advanceTimersByTimeAsync(300);
+
+    // After timeout, announcement should be updated
+    const updatedAnnouncement = document.querySelector('[role="status"][aria-live="polite"]');
+    expect(updatedAnnouncement).toHaveTextContent(`Todo deleted: ${testTodo.text}`);
+    expect(mockOnDelete).toHaveBeenCalledWith(testTodo.id);
+
+    vi.useRealTimers();
   });
 
   it('should handle delete errors gracefully', async () => {
+    vi.useFakeTimers();
     vi.spyOn(window, 'confirm').mockImplementation(() => true);
     vi.spyOn(window, 'alert').mockImplementation(() => {});
 
@@ -181,13 +185,13 @@ describe('TodoItem - Delete Functionality', () => {
     const deleteButton = screen.getByLabelText(`Delete "${testTodo.text}"`);
     fireEvent.click(deleteButton);
 
-    // Wait for animation timeout
-    await waitFor(
-      () => {
-        expect(mockOnDeleteWithError).toHaveBeenCalled();
-      },
-      { timeout: 400 }
-    );
+    // Advance timers to trigger the delete attempt
+    await vi.advanceTimersByTimeAsync(300);
+
+    expect(mockOnDeleteWithError).toHaveBeenCalled();
+    expect(window.alert).toHaveBeenCalledWith('Failed to delete todo. Please try again.');
+
+    vi.useRealTimers();
   });
 
   it('should have keyboard accessible delete button', () => {

@@ -1,6 +1,19 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { SyncService } from '../syncService';
 import { NetworkError } from '@/lib/errors';
+import { localStorageService } from '@/lib/storage/localStorage';
+
+// Mock localStorage at module level
+vi.mock('@/lib/storage/localStorage', () => {
+  return {
+    localStorageService: {
+      loadPendingSync: vi.fn(),
+      clearPendingSync: vi.fn(),
+      savePendingSync: vi.fn(),
+      load: vi.fn().mockReturnValue({ todos: [] }),
+    }
+  };
+});
 
 // Mock fetch globally
 global.fetch = vi.fn();
@@ -121,20 +134,37 @@ describe('SyncService', () => {
 
       const controller = new AbortController();
 
+      // Mock fetch to reject with abort error when signal is aborted
       (global.fetch as ReturnType<typeof vi.fn>).mockImplementation(() => {
-        controller.abort();
-        return new Promise(() => {}); // Never resolves
+        return new Promise((_, reject) => {
+          // Listen for abort signal
+          if (controller.signal.aborted) {
+            reject(new DOMException('The operation was aborted', 'AbortError'));
+          } else {
+            controller.signal.addEventListener('abort', () => {
+              reject(new DOMException('The operation was aborted', 'AbortError'));
+            });
+          }
+        });
       });
 
-      await expect(service.syncWithServer(todos, { signal: controller.signal })).rejects.toThrow(
-        'Sync cancelled'
-      );
+      // Start the sync
+      const syncPromise = service.syncWithServer(todos, { signal: controller.signal });
+
+      // Abort after a short delay
+      setTimeout(() => controller.abort(), 10);
+
+      // Should throw NetworkError with "Sync cancelled" message
+      await expect(syncPromise).rejects.toThrow('Sync cancelled');
     });
   });
 
   describe('Offline queue management', () => {
     it('should queue sync operations when offline', async () => {
       Object.defineProperty(navigator, 'onLine', { value: false });
+      
+      // Create new service after setting offline status
+      const offlineService = new SyncService();
 
       const todos = [
         {
@@ -146,11 +176,14 @@ describe('SyncService', () => {
         },
       ];
 
-      await expect(service.syncWithServer(todos)).rejects.toThrow(
+      await expect(offlineService.syncWithServer(todos)).rejects.toThrow(
         'Offline. Changes will sync when connection is restored.'
       );
 
-      expect(service.getPendingSyncCount()).toBeGreaterThan(0);
+      expect(offlineService.getPendingSyncCount()).toBeGreaterThan(0);
+      
+      // Clean up
+      offlineService.cleanup();
     });
 
     it('should process sync queue when coming back online', async () => {
@@ -232,15 +265,8 @@ describe('SyncService', () => {
         },
       ];
 
-      // Mock localStorage to have pending sync
-      const mockLocalStorage = {
-        loadPendingSync: vi.fn(() => todos),
-        clearPendingSync: vi.fn(),
-      };
-
-      vi.mock('@/lib/storage/localStorage', () => ({
-        localStorageService: mockLocalStorage,
-      }));
+      // Configure mock localStorage to have pending sync
+      (localStorageService.loadPendingSync as ReturnType<typeof vi.fn>).mockReturnValue(todos);
 
       (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue(
         new Response('{}', { status: 200 })
@@ -259,8 +285,14 @@ describe('SyncService', () => {
 
     it('should throw error when trying to sync while offline', async () => {
       Object.defineProperty(navigator, 'onLine', { value: false });
+      
+      // Create new service after setting offline status
+      const offlineService = new SyncService();
 
-      await expect(service.retryPendingSync()).rejects.toThrow('Cannot sync while offline');
+      await expect(offlineService.retryPendingSync()).rejects.toThrow('Cannot sync while offline');
+      
+      // Clean up
+      offlineService.cleanup();
     });
   });
 });

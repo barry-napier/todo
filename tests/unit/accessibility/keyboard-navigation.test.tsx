@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TodoList } from '@/components/todo/TodoList';
 import { TodoItem } from '@/components/todo/TodoItem';
@@ -217,7 +217,9 @@ describe('Keyboard Navigation', () => {
 
       // Enter edit mode
       const editButton = screen.getByLabelText('Edit "First todo"');
-      editButton.click();
+      act(() => {
+        editButton.click();
+      });
 
       const input = screen.getByLabelText('Edit todo text');
 
@@ -241,7 +243,9 @@ describe('Keyboard Navigation', () => {
 
       // Enter edit mode
       const editButton = screen.getByLabelText('Edit "First todo"');
-      editButton.click();
+      act(() => {
+        editButton.click();
+      });
 
       const input = screen.getByLabelText('Edit todo text');
 
@@ -281,7 +285,9 @@ describe('Keyboard Navigation', () => {
 
       // Enter edit mode
       const editButton = screen.getByLabelText('Edit "First todo"');
-      editButton.click();
+      act(() => {
+        editButton.click();
+      });
 
       // Input should be focused
       const input = screen.getByLabelText('Edit todo text');
