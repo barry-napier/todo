@@ -11,7 +11,7 @@ vi.mock('@/lib/storage/localStorage', () => {
       clearPendingSync: vi.fn(),
       savePendingSync: vi.fn(),
       load: vi.fn().mockReturnValue({ todos: [] }),
-    },
+    }
   };
 });
 
@@ -162,6 +162,9 @@ describe('SyncService', () => {
   describe('Offline queue management', () => {
     it('should queue sync operations when offline', async () => {
       Object.defineProperty(navigator, 'onLine', { value: false });
+      
+      // Create new service after setting offline status
+      const offlineService = new SyncService();
 
       // Create new service after setting offline status
       const offlineService = new SyncService();
@@ -181,7 +184,7 @@ describe('SyncService', () => {
       );
 
       expect(offlineService.getPendingSyncCount()).toBeGreaterThan(0);
-
+      
       // Clean up
       offlineService.cleanup();
     });
@@ -285,12 +288,12 @@ describe('SyncService', () => {
 
     it('should throw error when trying to sync while offline', async () => {
       Object.defineProperty(navigator, 'onLine', { value: false });
-
+      
       // Create new service after setting offline status
       const offlineService = new SyncService();
 
       await expect(offlineService.retryPendingSync()).rejects.toThrow('Cannot sync while offline');
-
+      
       // Clean up
       offlineService.cleanup();
     });

@@ -45,11 +45,11 @@ describe('ErrorBoundary', () => {
 
   it('should reset error state on retry', () => {
     let shouldThrow = true;
-
+    
     const TestComponent = () => {
       return <ThrowError shouldThrow={shouldThrow} />;
     };
-
+    
     render(
       <ErrorBoundary>
         <TestComponent />
@@ -63,7 +63,7 @@ describe('ErrorBoundary', () => {
 
     // Change the flag to not throw
     shouldThrow = false;
-
+    
     // Reset the error
     fireEvent.click(screen.getByText('Try Again'));
 
