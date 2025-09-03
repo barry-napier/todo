@@ -8,7 +8,7 @@ vi.mock('next/font/google', () => ({
     variable: '--font-geist',
   }),
   Geist_Mono: () => ({
-    className: 'mocked-geist-mono-font', 
+    className: 'mocked-geist-mono-font',
     variable: '--font-geist-mono',
   }),
 }));

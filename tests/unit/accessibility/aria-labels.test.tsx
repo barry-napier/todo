@@ -161,7 +161,7 @@ describe('ARIA Labels and Roles', () => {
       );
 
       const emptyStates = screen.getAllByRole('status');
-      const emptyState = emptyStates.find(el => el.textContent?.includes('No todos yet!'));
+      const emptyState = emptyStates.find((el) => el.textContent?.includes('No todos yet!'));
       expect(emptyState).toBeDefined();
       expect(screen.getByText('No todos yet!')).toBeInTheDocument();
     });

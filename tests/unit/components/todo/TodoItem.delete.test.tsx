@@ -26,7 +26,7 @@ describe('TodoItem - Delete Functionality', () => {
     vi.restoreAllMocks();
     vi.useRealTimers();
     // Clean up any lingering announcements
-    document.querySelectorAll('[role="status"]').forEach(el => el.remove());
+    document.querySelectorAll('[role="status"]').forEach((el) => el.remove());
   });
 
   it('should render delete button', () => {
