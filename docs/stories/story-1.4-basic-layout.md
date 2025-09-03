@@ -1,20 +1,24 @@
 # Story 1.4: Basic Layout & Shell
 
 ## Status
+
 Draft
 
 ## Story
+
 **As a** user,
 **I want** a clean, responsive application layout,
 **so that** I can use the app on any device
 
 ## Acceptance Criteria
+
 1. Responsive header with app title
 2. Main content area for todo list
 3. Mobile-first responsive design
 4. Loading and error boundaries implemented
 
 ## Tasks / Subtasks
+
 - [ ] Create layout components (AC: 1, 2)
   - [ ] Create `/src/components/layout/Header.tsx` with app title
   - [ ] Create `/src/components/layout/Container.tsx` for content wrapper
@@ -44,20 +48,25 @@ Draft
 ## Dev Notes
 
 ### Previous Story Insights
+
 Stories 1.1-1.3 have established the project foundation with Next.js, shadcn/ui components, and the data persistence layer. The basic project structure is in place.
 
 ### Component Structure
+
 [Source: architecture/source-tree.md]
 
 Create these layout components:
+
 - `/src/components/layout/Header.tsx` - Application header
 - `/src/components/layout/Container.tsx` - Content wrapper
 - `/src/components/layout/MainLayout.tsx` - Combined layout
 
 ### Layout Implementation
+
 [Source: architecture/coding-standards.md]
 
 **Header Component Example:**
+
 ```typescript
 export function Header() {
   return (
@@ -71,58 +80,73 @@ export function Header() {
 ```
 
 ### Error Boundary
+
 [Source: architecture/coding-standards.md]
 
 Next.js App Router uses `error.tsx` for error boundaries. Implement with:
+
 - User-friendly error message
 - Error logging to console
 - Recovery action (reload button)
 
 ### Responsive Design Requirements
+
 - Mobile breakpoint: 640px (sm)
 - Tablet breakpoint: 768px (md)
 - Desktop breakpoint: 1024px (lg)
 - Use Tailwind's responsive prefixes
 
 ### Loading States
+
 Use shadcn/ui Skeleton component (already installed in Story 1.2):
+
 ```typescript
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 ```
 
 ### Technical Constraints
+
 [Source: architecture/tech-stack.md]
+
 - Use Tailwind CSS 4 for styling
 - Follow mobile-first responsive approach
 - Ensure WCAG AA accessibility compliance
 
 ### Testing
+
 [Source: architecture/coding-standards.md]
 
 **Testing Requirements:**
+
 - Test files in `/tests/unit/components/layout/`
 - Use Vitest and Testing Library
 - Test responsive behavior with different viewport sizes
 - Verify error boundary functionality
 
 ## Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial story creation | Scrum Master |
+
+| Date       | Version | Description            | Author       |
+| ---------- | ------- | ---------------------- | ------------ |
+| 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
 
 ## Dev Agent Record
 
 ### Agent Model Used
+
 _To be filled by Dev Agent_
 
 ### Debug Log References
+
 _To be filled by Dev Agent_
 
 ### Completion Notes List
+
 _To be filled by Dev Agent_
 
 ### File List
+
 _To be filled by Dev Agent_
 
 ## QA Results
+
 _To be filled by QA Agent_

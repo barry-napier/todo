@@ -1,14 +1,17 @@
 # Story 2.3: Complete/Uncomplete Toggle
 
 ## Status
+
 Draft
 
 ## Story
+
 **As a** user,
 **I want** to mark todos as complete or incomplete,
 **so that** I can track my progress
 
 ## Acceptance Criteria
+
 1. Checkbox or toggle button for each todo
 2. Visual feedback on hover/focus
 3. Immediate visual update (strikethrough, opacity)
@@ -16,6 +19,7 @@ Draft
 5. Bulk complete/uncomplete actions (future enhancement)
 
 ## Tasks / Subtasks
+
 - [ ] Create TodoCheckbox component (AC: 1, 2)
   - [ ] Create `/src/components/todo/TodoCheckbox.tsx`
   - [ ] Use Checkbox component from shadcn/ui
@@ -52,22 +56,27 @@ Draft
 ## Dev Notes
 
 ### Previous Story Context
+
 - TodoItem component created in Story 2.2
 - useTodos hook established in Story 2.1
 - localStorage service from Story 1.3
 
 ### Component Implementation
+
 [Source: architecture/source-tree.md]
 
 Create component:
+
 - `/src/components/todo/TodoCheckbox.tsx`
 
 ### Checkbox Component
+
 [Source: architecture/coding-standards.md]
 
 Use shadcn/ui Checkbox:
+
 ```typescript
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface TodoCheckboxProps {
   checked: boolean;
@@ -77,30 +86,35 @@ interface TodoCheckboxProps {
 ```
 
 ### Toggle Implementation
+
 [Source: architecture/data-models.md]
 
 Update todo:
+
 ```typescript
 function toggleTodo(id: string) {
-  const todo = todos.find(t => t.id === id);
+  const todo = todos.find((t) => t.id === id);
   if (todo) {
     updateTodo(id, {
       completed: !todo.completed,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 }
 ```
 
 ### Visual States
+
 [Source: Epic 2 specifications]
 
 Completed todo styling:
+
 - Text: `line-through`
 - Opacity: `opacity-60`
 - Transition: `transition-all duration-200`
 
 ### Accessibility Requirements
+
 [Source: architecture/coding-standards.md]
 
 - ARIA label: "Mark as complete/incomplete"
@@ -109,38 +123,48 @@ Completed todo styling:
 - Focus visible indicator
 
 ### Technical Constraints
+
 [Source: architecture/tech-stack.md]
+
 - Use React.useCallback for handlers
 - Maintain < 100ms response time
 - TypeScript strict mode
 
 ### Testing
+
 [Source: architecture/coding-standards.md]
 
 **Test Requirements:**
+
 - Test file: `/tests/unit/components/todo/TodoCheckbox.test.tsx`
 - Test toggle state changes
 - Test accessibility features
 - Verify localStorage updates
 
 ## Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial story creation | Scrum Master |
+
+| Date       | Version | Description            | Author       |
+| ---------- | ------- | ---------------------- | ------------ |
+| 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
 
 ## Dev Agent Record
 
 ### Agent Model Used
+
 _To be filled by Dev Agent_
 
 ### Debug Log References
+
 _To be filled by Dev Agent_
 
 ### Completion Notes List
+
 _To be filled by Dev Agent_
 
 ### File List
+
 _To be filled by Dev Agent_
 
 ## QA Results
+
 _To be filled by QA Agent_

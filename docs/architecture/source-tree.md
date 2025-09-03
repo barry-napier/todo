@@ -98,38 +98,47 @@ personal-todo-app/
 ## Key Directory Descriptions
 
 ### `/src/app`
+
 Next.js App Router directory containing pages, layouts, and API routes. Each file represents a route in the application.
 
 ### `/src/components`
+
 Reusable React components organized by feature (todo) and type (ui, layout). Follow single responsibility principle.
 
 ### `/src/lib`
+
 Business logic, utilities, and services. Keep framework-agnostic when possible for better testability.
 
 ### `/src/types`
+
 Centralized TypeScript type definitions shared across the application.
 
 ### `/tests`
+
 Organized by test type (unit, integration, e2e) mirroring the src structure.
 
 ## File Naming Conventions
 
 ### Components
+
 - PascalCase for component files: `TodoItem.tsx`
 - Index files for barrel exports: `index.ts`
 - Test files alongside components: `TodoItem.test.tsx`
 
 ### Utilities & Hooks
+
 - camelCase for utility files: `localStorage.ts`
 - Prefix hooks with 'use': `useTodos.ts`
 
 ### Types
+
 - camelCase for type files: `todo.ts`
 - Use `.d.ts` for declaration files
 
 ## Import Path Aliases
 
 Configure in `tsconfig.json`:
+
 ```json
 {
   "compilerOptions": {
@@ -145,6 +154,7 @@ Configure in `tsconfig.json`:
 ```
 
 Usage example:
+
 ```typescript
 import { TodoItem } from '@/components/todo/TodoItem';
 import { useTodos } from '@/lib/hooks/useTodos';
@@ -154,7 +164,9 @@ import type { Todo } from '@/types/todo';
 ## Module Organization
 
 ### Feature Modules
+
 Group related functionality together:
+
 ```
 components/todo/
 ├── TodoItem.tsx        # Single todo display
@@ -167,7 +179,9 @@ components/todo/
 ```
 
 ### Shared Modules
+
 Reusable across features:
+
 ```
 components/ui/
 ├── button.tsx         # Base button component
@@ -191,33 +205,39 @@ out/                 # Static export (if used)
 ## Configuration Files
 
 ### Essential Configs
+
 - `next.config.js` - Next.js settings
 - `tsconfig.json` - TypeScript compiler options
 - `tailwind.config.ts` - Tailwind CSS customization
 - `components.json` - shadcn/ui component settings
 
 ### Development Configs
+
 - `.eslintrc.json` - Code linting rules
 - `.prettierrc` - Code formatting rules
 - `vitest.config.ts` - Test runner configuration
 
 ### Deployment Configs
+
 - `vercel.json` - Vercel platform settings
 - `.env.example` - Environment variable template
 
 ## Best Practices
 
 ### Keep It Organized
+
 - One component per file
 - Co-locate related files
 - Use barrel exports for clean imports
 
 ### Maintain Consistency
+
 - Follow naming conventions strictly
 - Keep similar structures for similar features
 - Document non-obvious organization choices
 
 ### Scale Thoughtfully
+
 - Start simple, refactor when needed
 - Don't over-organize prematurely
 - Keep the structure flat when possible

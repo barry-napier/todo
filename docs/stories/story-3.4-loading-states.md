@@ -3,14 +3,16 @@
 **Epic:** Epic 3 - User Experience Polish  
 **Status:** 📝 Draft  
 **Estimate:** 1 hour  
-**Assignee:** Developer  
+**Assignee:** Developer
 
 ## Story
+
 **As a** user  
 **I want** smooth transitions and clear feedback  
 **So that** I understand what's happening
 
 ## Acceptance Criteria
+
 - [ ] Skeleton screens during initial load
 - [ ] Smooth animations for todo operations
 - [ ] Loading spinners for async operations
@@ -21,23 +23,25 @@
 ## Technical Implementation
 
 ### Animation Timings (from Epic 3 specs)
+
 ```typescript
 // Animation constants from Epic 3 specifications
 const ANIMATION_DURATIONS = {
   microInteraction: 150, // Checkbox toggle, button hover
-  transition: 300,       // Todo add/remove, modal open/close
-  loadingDelay: 200,     // Delay before showing loading spinner
-  skeleton: 0            // Skeleton screens show immediately
+  transition: 300, // Todo add/remove, modal open/close
+  loadingDelay: 200, // Delay before showing loading spinner
+  skeleton: 0, // Skeleton screens show immediately
 } as const;
 
 const EASING = {
   easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
   easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
-  spring: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+  spring: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
 } as const;
 ```
 
 ### Skeleton Screen Component
+
 ```typescript
 function TodoListSkeleton() {
   return (
@@ -58,11 +62,12 @@ function TodoListSkeleton() {
 ```
 
 ### Optimistic UI Updates
+
 ```typescript
 function useTodoOperations() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [pendingOperations, setPendingOperations] = useState<Set<string>>(new Set());
-  
+
   const addTodoOptimistically = useCallback(async (text: string) => {
     const tempId = `temp-${Date.now()}`;
     const optimisticTodo: Todo = {
@@ -71,51 +76,50 @@ function useTodoOperations() {
       completed: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      isPending: true
+      isPending: true,
     };
-    
+
     // Immediate UI update
-    setTodos(prev => [...prev, optimisticTodo]);
-    setPendingOperations(prev => new Set([...prev, tempId]));
-    
+    setTodos((prev) => [...prev, optimisticTodo]);
+    setPendingOperations((prev) => new Set([...prev, tempId]));
+
     try {
       // Actual save operation
       const savedTodo = await saveTodo({ text });
-      
+
       // Replace optimistic todo with real one
-      setTodos(prev => prev.map(todo => 
-        todo.id === tempId ? savedTodo : todo
-      ));
+      setTodos((prev) => prev.map((todo) => (todo.id === tempId ? savedTodo : todo)));
     } catch (error) {
       // Revert optimistic update
-      setTodos(prev => prev.filter(todo => todo.id !== tempId));
+      setTodos((prev) => prev.filter((todo) => todo.id !== tempId));
       showErrorMessage('Failed to add todo');
     } finally {
-      setPendingOperations(prev => {
+      setPendingOperations((prev) => {
         const next = new Set(prev);
         next.delete(tempId);
         return next;
       });
     }
   }, []);
-  
+
   return { addTodoOptimistically, pendingOperations };
 }
 ```
 
 ### Smooth Transitions with Framer Motion
+
 ```typescript
 // Based on Epic 3 dependencies: framer-motion for animations
 import { motion, AnimatePresence } from 'framer-motion';
 
 const todoItemVariants = {
-  initial: { 
-    opacity: 0, 
+  initial: {
+    opacity: 0,
     x: -20,
     scale: 0.95
   },
-  animate: { 
-    opacity: 1, 
+  animate: {
+    opacity: 1,
     x: 0,
     scale: 1,
     transition: {
@@ -123,8 +127,8 @@ const todoItemVariants = {
       ease: "easeOut"
     }
   },
-  exit: { 
-    opacity: 0, 
+  exit: {
+    opacity: 0,
     x: 20,
     scale: 0.95,
     transition: {
@@ -155,14 +159,15 @@ function AnimatedTodoList({ todos }: { todos: Todo[] }) {
 ```
 
 ### Loading States Hook
+
 ```typescript
 function useLoadingStates() {
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
-  
+
   const setLoading = useCallback((key: string, isLoading: boolean) => {
-    setLoadingStates(prev => ({ ...prev, [key]: isLoading }));
+    setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   }, []);
-  
+
   const withLoading = useCallback(
     async <T>(key: string, operation: () => Promise<T>): Promise<T> => {
       setLoading(key, true);
@@ -176,31 +181,31 @@ function useLoadingStates() {
     },
     [setLoading]
   );
-  
+
   return { loadingStates, withLoading };
 }
 ```
 
 ### Success Confirmation Toast
+
 ```typescript
 function useToast() {
   const [toasts, setToasts] = useState<Toast[]>([]);
-  
-  const showToast = useCallback((
-    message: string, 
-    type: 'success' | 'error' | 'info' = 'info',
-    duration = 3000
-  ) => {
-    const id = Date.now().toString();
-    const toast: Toast = { id, message, type };
-    
-    setToasts(prev => [...prev, toast]);
-    
-    setTimeout(() => {
-      setToasts(prev => prev.filter(t => t.id !== id));
-    }, duration);
-  }, []);
-  
+
+  const showToast = useCallback(
+    (message: string, type: 'success' | 'error' | 'info' = 'info', duration = 3000) => {
+      const id = Date.now().toString();
+      const toast: Toast = { id, message, type };
+
+      setToasts((prev) => [...prev, toast]);
+
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+      }, duration);
+    },
+    []
+  );
+
   return { toasts, showToast };
 }
 ```
@@ -208,6 +213,7 @@ function useToast() {
 ## Implementation Checklist
 
 ### Initial Load States
+
 - [ ] Skeleton screens for todo list
 - [ ] Progressive loading of components
 - [ ] Smooth transition from skeleton to content
@@ -215,6 +221,7 @@ function useToast() {
 - [ ] Error state fallbacks
 
 ### Operation Feedback
+
 - [ ] Optimistic UI for adding todos
 - [ ] Loading indicators for save operations
 - [ ] Success confirmations via toast notifications
@@ -222,6 +229,7 @@ function useToast() {
 - [ ] Undo functionality for destructive actions
 
 ### Animation Implementation
+
 - [ ] Todo add/remove animations (300ms)
 - [ ] Checkbox toggle micro-interactions (150ms)
 - [ ] Modal/dialog transitions
@@ -229,6 +237,7 @@ function useToast() {
 - [ ] Page transition effects
 
 ### Bulk Operations
+
 - [ ] Progress bars for bulk operations
 - [ ] Batch operation feedback
 - [ ] Cancel functionality for long operations
@@ -237,6 +246,7 @@ function useToast() {
 ## Dev Notes
 
 ### Performance Considerations
+
 From `/workspaces/todo/docs/architecture/tech-stack.md` and Epic 3 performance targets:
 
 - 60fps animations requirement
@@ -245,7 +255,9 @@ From `/workspaces/todo/docs/architecture/tech-stack.md` and Epic 3 performance t
 - Avoid animating layout properties when possible
 
 ### Animation Library Integration
+
 Epic 3 dependencies specify framer-motion:
+
 ```typescript
 // Motion components with performance optimization
 const MotionDiv = motion.div;
@@ -255,79 +267,85 @@ const MotionList = motion.ul;
 const slideVariants = {
   enter: { x: '100%', opacity: 0 },
   center: { x: 0, opacity: 1 },
-  exit: { x: '-100%', opacity: 0 }
+  exit: { x: '-100%', opacity: 0 },
 };
 ```
 
 ### Accessibility in Animations
+
 Following accessibility standards from Story 3.2:
+
 ```typescript
 // Respect reduced motion preferences
 const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
 
-const motionProps = prefersReducedMotion 
+const motionProps = prefersReducedMotion
   ? { initial: false, animate: false, exit: false }
   : { variants: todoItemVariants };
 ```
 
 ### Loading State Patterns
+
 ```typescript
 // Different loading patterns for different scenarios
 const LoadingPatterns = {
   skeleton: 'immediate', // Show immediately
-  spinner: 'delayed',    // Show after 200ms
+  spinner: 'delayed', // Show after 200ms
   progress: 'immediate', // For known duration operations
-  pulse: 'continuous'    // For ongoing background operations
+  pulse: 'continuous', // For ongoing background operations
 } as const;
 ```
 
 ## Testing Requirements
 
 ### Animation Testing
+
 ```typescript
 describe('Loading States', () => {
   it('should show skeleton screen during initial load', () => {
     render(<TodoApp />);
     expect(screen.getByLabelText('Loading todos')).toBeInTheDocument();
   });
-  
+
   it('should show optimistic UI for new todos', async () => {
     const { user } = setup(<TodoApp />);
-    
+
     await user.type(screen.getByPlaceholderText('Add a todo...'), 'New todo');
     await user.click(screen.getByRole('button', { name: 'Add' }));
-    
+
     // Should appear immediately (optimistic)
     expect(screen.getByText('New todo')).toBeInTheDocument();
   });
-  
+
   it('should show loading spinner for delayed operations', async () => {
     vi.useFakeTimers();
-    
+
     render(<TodoApp />);
-    
+
     // Trigger long operation
     await user.click(screen.getByRole('button', { name: 'Sync' }));
-    
+
     // Should not show immediately
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
-    
+
     // Should show after delay
     vi.advanceTimersByTime(200);
     expect(screen.getByRole('status')).toBeInTheDocument();
-    
+
     vi.useRealTimers();
   });
 });
 ```
 
 ### Performance Testing
+
 - [ ] Measure animation frame rates using DevTools
 - [ ] Test with reduced motion preferences
 - [ ] Verify smooth transitions on slower devices
 - [ ] Check for layout thrashing during animations
 
 ### Manual Testing
+
 - [ ] Test all transition states in different browsers
 - [ ] Verify loading states on slow connections
 - [ ] Check animation smoothness on mobile devices
@@ -336,20 +354,21 @@ describe('Loading States', () => {
 ## Loading State Components
 
 ### Inline Loading Spinner
+
 ```typescript
 function LoadingSpinner({ size = 'md', delay = 200 }: LoadingSpinnerProps) {
   const [show, setShow] = useState(false);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => setShow(true), delay);
     return () => clearTimeout(timer);
   }, [delay]);
-  
+
   if (!show) return null;
-  
+
   return (
-    <div 
-      role="status" 
+    <div
+      role="status"
       aria-label="Loading"
       className={`animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 ${sizeClasses[size]}`}
     />
@@ -358,10 +377,11 @@ function LoadingSpinner({ size = 'md', delay = 200 }: LoadingSpinnerProps) {
 ```
 
 ### Progress Indicator
+
 ```typescript
 function ProgressIndicator({ current, total, operation }: ProgressProps) {
   const percentage = Math.round((current / total) * 100);
-  
+
   return (
     <div className="w-full" role="progressbar" aria-valuenow={percentage}>
       <div className="flex justify-between text-sm mb-1">
@@ -369,7 +389,7 @@ function ProgressIndicator({ current, total, operation }: ProgressProps) {
         <span>{percentage}%</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2">
-        <div 
+        <div
           className="bg-blue-600 h-2 rounded-full transition-all duration-300"
           style={{ width: `${percentage}%` }}
         />
@@ -380,12 +400,14 @@ function ProgressIndicator({ current, total, operation }: ProgressProps) {
 ```
 
 ## Dependencies
+
 - framer-motion for complex animations
 - Tailwind CSS for animation utilities
 - React hooks for state management
 - Performance monitoring for animation frame rates
 
 ## Success Criteria
+
 - [ ] All animations run at 60fps
 - [ ] Loading states provide clear feedback
 - [ ] Optimistic UI updates feel instant
@@ -393,22 +415,26 @@ function ProgressIndicator({ current, total, operation }: ProgressProps) {
 - [ ] Accessible to users with motion sensitivity
 
 ## Technical Debt & Future Enhancements
+
 - Implement view transitions API when widely supported
 - Add more sophisticated loading state orchestration
 - Create animation presets for consistent motion design
 - Implement smart preloading strategies
 
 ## Change Log
-| Date | Change | Author |
-|------|--------|--------|
-| TBD | Initial story creation | Developer |
+
+| Date | Change                 | Author    |
+| ---- | ---------------------- | --------- |
+| TBD  | Initial story creation | Developer |
 
 ## Related Stories
+
 - Story 3.2: Accessibility Features (motion preferences)
 - Story 3.5: Performance Optimizations (animation performance)
 - Story 2.1: Core Todo Operations (optimistic updates)
 
 ## References
+
 - [Framer Motion Documentation](https://www.framer.com/motion/)
 - [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API)
 - [Animation Performance Best Practices](https://web.dev/animations/)

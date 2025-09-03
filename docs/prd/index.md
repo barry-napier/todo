@@ -3,14 +3,17 @@
 This directory contains the sharded Product Requirements Document for the Personal Todo Application.
 
 ## Overview
+
 The PRD has been broken down into epic-based documents for better organization and focused development.
 
 ## Document Structure
 
 ### Core Document
+
 - [`../prd.md`](../prd.md) - Main consolidated PRD with goals, requirements, and overview
 
 ### Epic Documents
+
 1. [`epic-1-foundation-core.md`](./epic-1-foundation-core.md) - Foundation & Core Infrastructure
    - Project setup with Next.js, TypeScript, Tailwind CSS 4
    - shadcn/ui component integration
@@ -34,26 +37,31 @@ The PRD has been broken down into epic-based documents for better organization a
 ## How to Use These Documents
 
 ### For Development Planning
+
 1. Start with the epic overview in each document
 2. Review user stories for implementation details
 3. Check acceptance criteria for definition of done
 4. Use technical notes for implementation guidance
 
 ### For Progress Tracking
+
 - Each epic includes success metrics
 - User stories can be tracked individually
 - Estimated effort helps with sprint planning
 
 ### For Testing
+
 - Acceptance criteria serve as test cases
 - Technical specifications guide integration testing
 - Success metrics validate epic completion
 
 ## Navigation Guide
+
 - **Starting Development?** Begin with Epic 1
 - **Implementing Features?** Focus on Epic 2
 - **Polishing for Production?** Reference Epic 3
 - **Need Overall Context?** See the main PRD
 
 ## Version Control
+
 Each epic document can be versioned independently as features evolve. See change logs in individual epic files for history.

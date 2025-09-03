@@ -23,7 +23,7 @@ A clean, fast, and reliable todo list application built with Next.js, TypeScript
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 
 ### Installation
@@ -49,24 +49,27 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 ## Documentation
 
 - [Project Brief](docs/project-brief.md) - High-level vision and goals
-- [Product Requirements](docs/prd.md) - Detailed feature specifications  
+- [Product Requirements](docs/prd.md) - Detailed feature specifications
 - [UI/UX Specification](docs/ux-ui-spec.md) - Design and user experience details
 - [Architecture](docs/architecture.md) - Technical architecture and decisions
 
 ## Development Roadmap
 
 ### Phase 1: MVP
+
 - Core todo CRUD operations
 - Local persistence
 - Responsive UI
 
 ### Phase 2: Enhancements
+
 - Categories/tags
 - Due dates
 - Search and filtering
 - Basic analytics
 
 ### Phase 3: Advanced Features
+
 - Cloud sync
 - Mobile app
 - Calendar integration

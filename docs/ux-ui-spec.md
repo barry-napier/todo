@@ -7,6 +7,7 @@ This document defines the user experience goals, information architecture, user 
 ### Target User Personas
 
 **Primary User: Personal Productivity User**
+
 - Individual seeking simple, reliable task management
 - Values speed and clarity over complex features
 - Uses multiple devices throughout the day
@@ -30,9 +31,10 @@ This document defines the user experience goals, information architecture, user 
 5. **Accessible by default** - Design for all users from the start with semantic HTML and ARIA support
 
 ### Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial UI/UX specification | UX Expert Sally |
+
+| Date       | Version | Description                 | Author          |
+| ---------- | ------- | --------------------------- | --------------- |
+| 2025-09-02 | 1.0     | Initial UI/UX specification | UX Expert Sally |
 
 ## Information Architecture (IA)
 
@@ -87,6 +89,7 @@ graph TD
 ```
 
 #### Edge Cases & Error Handling:
+
 - Empty text input shows inline validation message
 - Network failures save locally and sync when available
 - Long text wraps gracefully in display
@@ -109,25 +112,26 @@ graph TD
     B -->|Click Checkbox| C[Toggle Completion]
     B -->|Click Text| D[Enter Edit Mode]
     B -->|Click Delete| E[Delete Todo]
-    
+
     C --> F[Update Visual State]
     F --> G[Persist Change]
     G --> H[Show Feedback]
-    
+
     D --> I[Show Text Input]
     I --> J{Save or Cancel?}
     J -->|Enter/Save| K[Update Text]
     J -->|Escape/Cancel| L[Revert to Original]
     K --> G
     L --> A
-    
+
     E --> M[Remove from List]
     M --> G
-    
+
     H --> A
 ```
 
 #### Edge Cases & Error Handling:
+
 - Edit mode cancels when clicking outside todo item
 - Delete action is immediate (no confirmation for simplicity)
 - Persistence failures show retry option with local backup
@@ -145,6 +149,7 @@ graph TD
 **Purpose:** Primary interface for all todo management activities
 
 **Key Elements:**
+
 - Application title/header (minimal)
 - Add todo input field (prominent placement)
 - Todo list container (scrollable)
@@ -160,6 +165,7 @@ graph TD
 **Purpose:** Display and interact with single todo items
 
 **Key Elements:**
+
 - Checkbox for completion toggle (left aligned)
 - Todo text content (expandable width)
 - Edit mode text input (inline replacement)
@@ -214,31 +220,33 @@ graph TD
 
 ### Color Palette
 
-| Color Type | Hex Code | Usage |
-|------------|----------|-------|
-| Primary | #0f172a | Text, borders, primary actions |
-| Secondary | #64748b | Muted text, secondary elements |
-| Accent | #3b82f6 | Focus states, active elements |
-| Success | #22c55e | Completed todos, positive feedback |
-| Warning | #f59e0b | Validation messages, cautions |
-| Error | #ef4444 | Error states, destructive actions |
-| Neutral | #f8fafc, #e2e8f0, #cbd5e1 | Backgrounds, borders, subtle elements |
+| Color Type | Hex Code                  | Usage                                 |
+| ---------- | ------------------------- | ------------------------------------- |
+| Primary    | #0f172a                   | Text, borders, primary actions        |
+| Secondary  | #64748b                   | Muted text, secondary elements        |
+| Accent     | #3b82f6                   | Focus states, active elements         |
+| Success    | #22c55e                   | Completed todos, positive feedback    |
+| Warning    | #f59e0b                   | Validation messages, cautions         |
+| Error      | #ef4444                   | Error states, destructive actions     |
+| Neutral    | #f8fafc, #e2e8f0, #cbd5e1 | Backgrounds, borders, subtle elements |
 
 ### Typography
 
 #### Font Families
+
 - **Primary:** Inter (system font fallback)
 - **Secondary:** System UI stack
 - **Monospace:** JetBrains Mono (for any code/technical content)
 
 #### Type Scale
-| Element | Size | Weight | Line Height |
-|---------|------|--------|-------------|
-| H1 | 2rem | 600 | 1.2 |
-| H2 | 1.5rem | 500 | 1.3 |
-| H3 | 1.25rem | 500 | 1.4 |
-| Body | 1rem | 400 | 1.5 |
-| Small | 0.875rem | 400 | 1.4 |
+
+| Element | Size     | Weight | Line Height |
+| ------- | -------- | ------ | ----------- |
+| H1      | 2rem     | 600    | 1.2         |
+| H2      | 1.5rem   | 500    | 1.3         |
+| H3      | 1.25rem  | 500    | 1.4         |
+| Body    | 1rem     | 400    | 1.5         |
+| Small   | 0.875rem | 400    | 1.4         |
 
 ### Iconography
 
@@ -261,13 +269,15 @@ graph TD
 ### Key Requirements
 
 **Visual:**
+
 - Color contrast ratios: 4.5:1 for normal text, 3:1 for large text
-- Focus indicators: Clear 2px outline with high contrast color (#3b82f6) 
+- Focus indicators: Clear 2px outline with high contrast color (#3b82f6)
 - Text sizing: Scalable to 200% without horizontal scroll
 - High contrast mode: Enhanced visual states for users with vision needs
 - Completion states: Strong visual distinction beyond opacity (icon + strikethrough + color)
 
 **Interaction:**
+
 - Keyboard navigation: Full arrow key navigation within todo list, home/end for list boundaries
 - Screen reader support: Semantic HTML with comprehensive ARIA labels
 - Touch targets: Verified 44px minimum with 8px spacing between targets
@@ -275,6 +285,7 @@ graph TD
 - Focus management: Proper focus restoration after edit cancellation
 
 **Content:**
+
 - Alternative text: Descriptive labels for all icons and status indicators
 - Heading structure: Logical H1-H6 hierarchy with skip links
 - Form labels: Explicit labeling with clear instructions and validation messages
@@ -282,6 +293,7 @@ graph TD
 - Error messaging: Plain language with specific recovery instructions
 
 **Technical Implementation:**
+
 - ARIA live region for status announcements: "Todo added", "Todo completed", "Todo deleted"
 - Focus trap implementation for edit mode with escape key support
 - Roving tabindex for efficient list navigation
@@ -293,7 +305,7 @@ graph TD
 - Automated testing with axe-core integration in test suite
 - Manual testing with screen readers (NVDA, JAWS, VoiceOver) on all user flows
 - Keyboard-only navigation testing through complete workflows
-- High contrast mode testing in Windows and browser settings  
+- High contrast mode testing in Windows and browser settings
 - Touch target verification on actual mobile devices
 - Cognitive accessibility testing with simplified language validation
 
@@ -301,12 +313,12 @@ graph TD
 
 ### Breakpoints
 
-| Breakpoint | Min Width | Max Width | Target Devices |
-|------------|-----------|-----------|----------------|
-| Mobile | 320px | 767px | Smartphones |
-| Tablet | 768px | 1023px | Tablets, small laptops |
-| Desktop | 1024px | 1439px | Laptops, desktop monitors |
-| Wide | 1440px | - | Large monitors, ultrawide displays |
+| Breakpoint | Min Width | Max Width | Target Devices                     |
+| ---------- | --------- | --------- | ---------------------------------- |
+| Mobile     | 320px     | 767px     | Smartphones                        |
+| Tablet     | 768px     | 1023px    | Tablets, small laptops             |
+| Desktop    | 1024px    | 1439px    | Laptops, desktop monitors          |
+| Wide       | 1440px    | -         | Large monitors, ultrawide displays |
 
 ### Adaptation Patterns
 
@@ -327,7 +339,7 @@ Subtle, purposeful animations that enhance usability without causing distraction
 ### Key Animations
 
 - **Todo Add:** Gentle slide-in from top with fade (300ms, ease-out) plus focus shift to new item
-- **Todo Complete:** Smooth strikethrough animation with opacity change (200ms, ease-in-out) plus ARIA announcement  
+- **Todo Complete:** Smooth strikethrough animation with opacity change (200ms, ease-in-out) plus ARIA announcement
 - **Todo Delete:** Quick slide-out to right with fade (250ms, ease-in) plus focus restoration to next item
 - **Edit Mode:** Smooth transition to input field with focus highlight (150ms, ease-out) plus screen reader mode announcement
 - **Hover States:** Subtle scale or shadow change (100ms, ease-out) with reduced motion fallbacks
@@ -359,7 +371,7 @@ Optimize for performance through efficient component design, minimal re-renders 
 ### Design Handoff Checklist
 
 - [x] All user flows documented
-- [x] Component inventory complete  
+- [x] Component inventory complete
 - [x] Accessibility requirements defined
 - [x] Responsive strategy clear
 - [x] Brand guidelines incorporated

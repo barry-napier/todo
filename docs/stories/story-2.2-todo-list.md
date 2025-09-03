@@ -1,14 +1,17 @@
 # Story 2.2: Todo List Display
 
 ## Status
+
 Draft
 
 ## Story
+
 **As a** user,
 **I want** to see all my todos in a clear list,
 **so that** I can understand my tasks at a glance
 
 ## Acceptance Criteria
+
 1. Todos displayed in chronological order (newest first)
 2. Clear visual distinction between todo text and actions
 3. Completed todos show strikethrough styling
@@ -17,6 +20,7 @@ Draft
 6. Todo count indicator
 
 ## Tasks / Subtasks
+
 - [ ] Create TodoList component (AC: 1, 2, 5)
   - [ ] Create `/src/components/todo/TodoList.tsx`
   - [ ] Implement todo mapping logic
@@ -58,18 +62,22 @@ Draft
 ## Dev Notes
 
 ### Previous Story Context
+
 - Story 2.1 created AddTodo component and useTodos hook
 - localStorage service available from Story 1.3
 - Layout components from Story 1.4
 
 ### Component Structure
+
 [Source: architecture/source-tree.md]
 
 Create components:
+
 - `/src/components/todo/TodoList.tsx` - List container
 - `/src/components/todo/TodoItem.tsx` - Individual todo
 
 ### TodoItem Component
+
 [Source: architecture/coding-standards.md]
 
 ```typescript
@@ -82,32 +90,37 @@ interface TodoItemProps {
 ```
 
 ### Styling Guidelines
+
 [Source: architecture/coding-standards.md]
 
 Use Tailwind classes:
+
 - Completed: `line-through opacity-60`
 - Hover: `hover:bg-gray-50`
 - Card spacing: `p-4 space-y-2`
 
 ### Empty State
+
 Display when `todos.length === 0`:
+
 - Friendly message: "No todos yet!"
 - Subtext: "Add your first task above"
 - Optional icon/illustration
 
 ### Todo Sorting
+
 [Source: architecture/data-models.md]
 
 Sort by createdAt descending:
+
 ```typescript
-todos.sort((a, b) => 
-  new Date(b.createdAt).getTime() - 
-  new Date(a.createdAt).getTime()
-)
+todos.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 ```
 
 ### Animation Approach
+
 Use CSS transitions for performance:
+
 ```css
 .todo-item {
   transition: all 0.2s ease;
@@ -115,38 +128,48 @@ Use CSS transitions for performance:
 ```
 
 ### Technical Constraints
+
 [Source: architecture/tech-stack.md]
+
 - React 18.3.1 features available
 - Use React.memo for performance
 - TypeScript strict mode
 
 ### Testing
+
 [Source: architecture/coding-standards.md]
 
 **Test Requirements:**
+
 - Test files: `/tests/unit/components/todo/TodoList.test.tsx`
 - Mock todo data for testing
 - Test component integration
 - Verify accessibility
 
 ## Change Log
-| Date | Version | Description | Author |
-|------|---------|-------------|--------|
-| 2025-09-02 | 1.0 | Initial story creation | Scrum Master |
+
+| Date       | Version | Description            | Author       |
+| ---------- | ------- | ---------------------- | ------------ |
+| 2025-09-02 | 1.0     | Initial story creation | Scrum Master |
 
 ## Dev Agent Record
 
 ### Agent Model Used
+
 _To be filled by Dev Agent_
 
 ### Debug Log References
+
 _To be filled by Dev Agent_
 
 ### Completion Notes List
+
 _To be filled by Dev Agent_
 
 ### File List
+
 _To be filled by Dev Agent_
 
 ## QA Results
+
 _To be filled by QA Agent_

@@ -10,7 +10,7 @@ This is a Personal Todo Application - a simple, effective todo list management s
 
 - **Frontend Framework:** Next.js (latest) with App Router
 - **Language:** TypeScript 5.3.3
-- **Styling:** Tailwind CSS 4, shadcn/ui components  
+- **Styling:** Tailwind CSS 4, shadcn/ui components
 - **Deployment:** Vercel
 - **Data Persistence:** localStorage with optional API backup
 
@@ -29,6 +29,7 @@ npx shadcn@latest init
 ## Architecture Overview
 
 The application follows a Jamstack architecture with:
+
 - Next.js App Router for both frontend and API routes
 - Client-first data strategy using localStorage for instant interactions
 - Component-based UI with reusable React components
@@ -37,7 +38,7 @@ The application follows a Jamstack architecture with:
 ## Core Features (MVP)
 
 1. Add Todo - Quick text entry for new tasks
-2. View Todos - Clean list display of all tasks  
+2. View Todos - Clean list display of all tasks
 3. Mark Complete - Toggle completion status
 4. Edit Todo - Modify existing task text
 5. Delete Todo - Remove tasks from list
