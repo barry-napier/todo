@@ -106,50 +106,54 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
   return (
     <Card
       className={cn(
-        'group p-3 transition-all duration-300 hover:shadow-md',
+        'group transition-all duration-300 hover:shadow-md',
+        // Responsive padding
+        'p-3 sm:p-4',
         isDeleting && 'animate-slide-out',
         todo.completed && 'opacity-60'
       )}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex items-start sm:items-center gap-2 sm:gap-3">
         <TodoCheckbox
           todoId={todo.id}
           todoText={todo.text}
           checked={todo.completed}
           onCheckedChange={() => onToggle(todo.id)}
-          className="min-w-[20px] min-h-[20px]"
+          className="mt-1 sm:mt-0 min-w-[24px] min-h-[24px] sm:min-w-[20px] sm:min-h-[20px]"
         />
 
         {isEditing ? (
-          <div className="flex-1 flex items-center gap-2">
+          <div className="flex-1 flex flex-col sm:flex-row gap-2">
             <Input
               ref={inputRef}
               value={editText}
               onChange={(e) => setEditText(e.target.value)}
               onKeyDown={handleKeyDown}
               onBlur={handleSave}
-              className="flex-1"
+              className="flex-1 h-10 sm:h-9"
               maxLength={500}
             />
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={handleSave}
-              aria-label="Save changes"
-              className="min-w-[32px] min-h-[32px]"
-            >
-              <Check className="h-4 w-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              onMouseDown={(e) => e.preventDefault()}
-              onClick={handleCancel}
-              aria-label="Cancel editing"
-              className="min-w-[32px] min-h-[32px]"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={handleSave}
+                aria-label="Save changes"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[32px] sm:min-h-[32px]"
+              >
+                <Check className="h-5 w-5 sm:h-4 sm:w-4" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={handleCancel}
+                aria-label="Cancel editing"
+                className="min-w-[44px] min-h-[44px] sm:min-w-[32px] sm:min-h-[32px]"
+              >
+                <X className="h-5 w-5 sm:h-4 sm:w-4" />
+              </Button>
+            </div>
           </div>
         ) : (
           <>
@@ -157,6 +161,8 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
               onClick={() => setIsEditing(true)}
               className={cn(
                 'flex-1 cursor-pointer transition-all duration-200',
+                'text-base sm:text-sm',
+                'py-1 sm:py-0',
                 todo.completed && 'line-through text-muted-foreground decoration-2'
               )}
             >
@@ -166,7 +172,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
               todoText={todo.text}
               onEdit={() => setIsEditing(true)}
               onDelete={handleDelete}
-              className="touch:opacity-100"
+              className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
             />
           </>
         )}

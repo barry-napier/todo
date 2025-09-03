@@ -63,8 +63,8 @@ describe('TodoActions', () => {
 
     const actionsContainer = screen.getByLabelText(`Delete "${todoText}"`).parentElement;
     expect(actionsContainer).toHaveClass('custom-class');
-    expect(actionsContainer).toHaveClass('opacity-0');
-    expect(actionsContainer).toHaveClass('group-hover:opacity-100');
+    expect(actionsContainer).toHaveClass('flex');
+    expect(actionsContainer).toHaveClass('gap-1');
   });
 
   it('should apply destructive styling to delete button', () => {

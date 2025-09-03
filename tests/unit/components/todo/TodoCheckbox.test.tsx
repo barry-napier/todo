@@ -118,7 +118,7 @@ describe('TodoCheckbox', () => {
 
       const checkIcon = container.querySelector('svg');
       expect(checkIcon).toBeInTheDocument();
-      expect(checkIcon).toHaveClass('h-3.5', 'w-3.5');
+      expect(checkIcon).toHaveClass('h-4', 'w-4', 'sm:h-3.5', 'sm:w-3.5');
     });
 
     it('should have hover styles', async () => {

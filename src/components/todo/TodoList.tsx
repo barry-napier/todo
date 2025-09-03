@@ -33,9 +33,11 @@ export function TodoList({ todos, onToggle, onDelete, onUpdate }: TodoListProps)
 
   if (todos.length === 0) {
     return (
-      <div className="text-center py-16 px-6">
-        <CheckCircle className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-muted-foreground mb-2">No todos yet!</h3>
+      <div className="text-center py-12 sm:py-16 px-4 sm:px-6">
+        <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-muted-foreground/30 mx-auto mb-3 sm:mb-4" />
+        <h3 className="text-base sm:text-lg font-semibold text-muted-foreground mb-2">
+          No todos yet!
+        </h3>
         <p className="text-sm text-muted-foreground/80">Add your first task above to get started</p>
       </div>
     );
@@ -44,17 +46,17 @@ export function TodoList({ todos, onToggle, onDelete, onUpdate }: TodoListProps)
   return (
     <>
       {/* Todo count indicator above the list */}
-      <div className="flex items-center justify-between px-2 py-3 text-sm text-muted-foreground border-b">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between px-2 py-3 text-xs sm:text-sm text-muted-foreground border-b gap-1 sm:gap-0">
         <span className="font-medium">
           {totalCount} {totalCount === 1 ? 'todo' : 'todos'}
         </span>
-        <div className="flex gap-4">
+        <div className="flex gap-3 sm:gap-4">
           <span>{activeCount} active</span>
           <span>{completedCount} completed</span>
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 sm:space-y-3">
         {sortedTodos.map((todo, index) => (
           <div
             key={todo.id}
