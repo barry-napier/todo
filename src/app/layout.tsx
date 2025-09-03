@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { MainLayout } from '@/components/layout/MainLayout';
+import { PWAInit } from '@/components/pwa/PWAInit';
 import './globals.css';
 
 const geistSans = Geist({
@@ -14,8 +15,29 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Todo App',
-  description: 'A simple and effective todo list application',
+  title: 'Personal Todo App',
+  description: 'A simple, effective todo list management system',
+  manifest: '/manifest.json',
+  themeColor: '#3b82f6',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'TodoApp',
+  },
+  icons: {
+    icon: [
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/icon-152x152.png', sizes: '152x152', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
+  },
+  other: {
+    'msapplication-TileColor': '#3b82f6',
+    'msapplication-TileImage': '/icons/icon-144x144.png',
+  },
 };
 
 export const viewport = {
@@ -33,6 +55,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* PWA initialization */}
+        <PWAInit />
         {/* Skip to main content link for keyboard users */}
         <a
           href="#main-content"
