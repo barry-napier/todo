@@ -1,0 +1,127 @@
+name: PR E2E Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    # Run E2E tests only on code changes
+    paths:
+      - 'src/**'
+      - 'app/**'
+      - 'pages/**'
+      - 'components/**'
+      - 'tests/e2e/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      
+      - name: Run E2E tests - ${{ matrix.browser }}
+        run: npx playwright test --project="${{ matrix.browser }}"
+        env:
+          CI: true
+          PLAYWRIGHT_BROWSERS_PATH: 0
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 7
+      
+      - name: Upload test videos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-videos-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 3
+
+  mobile-e2e-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+      
+      - name: Run Mobile E2E tests
+        run: npx playwright test --project="Mobile Chrome"
+        env:
+          CI: true
+          PLAYWRIGHT_BROWSERS_PATH: 0
+      
+      - name: Upload mobile test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results-mobile
+          path: playwright-report/
+          retention-days: 7
+
+  e2e-test-summary:
+    needs: [e2e-tests, mobile-e2e-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Check E2E test results
+        run: |
+          if [[ "${{ needs.e2e-tests.result }}" == "failure" ]] || [[ "${{ needs.mobile-e2e-tests.result }}" == "failure" ]]; then
+            echo "❌ E2E tests failed"
+            exit 1
+          elif [[ "${{ needs.e2e-tests.result }}" == "cancelled" ]] || [[ "${{ needs.mobile-e2e-tests.result }}" == "cancelled" ]]; then
+            echo "⚠️ E2E tests were cancelled"
+            exit 1
+          else
+            echo "✅ All E2E tests passed successfully"
+          fi

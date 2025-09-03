@@ -69,7 +69,7 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate, tabIndex = 0 }: T
   };
 
   const handleDelete = () => {
-    // Show confirmation dialog
+    // Show confirmation dialog with improved UX
     const confirmed = window.confirm(`Delete "${todo.text}"?`);
 
     if (confirmed) {
