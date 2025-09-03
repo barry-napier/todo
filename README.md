@@ -10,6 +10,7 @@ A clean, fast, and reliable todo list application built with Next.js, TypeScript
 - 🗑️ Delete tasks
 - 💾 Persistent storage between sessions
 - 📱 Responsive design for all devices
+- 🧪 **Comprehensive testing with Playwright and Vitest**
 
 ## Tech Stack
 
