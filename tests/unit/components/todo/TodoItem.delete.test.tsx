@@ -225,9 +225,10 @@ describe('TodoItem - Delete Functionality', () => {
     const card = container.querySelector('.group');
     expect(card).toBeInTheDocument();
 
-    // TodoActions should have opacity-0 class initially
+    // TodoActions should be visible on mobile, hidden on desktop
     const actionsContainer = screen.getByLabelText(`Delete "${testTodo.text}"`).parentElement;
-    expect(actionsContainer).toHaveClass('opacity-0');
-    expect(actionsContainer).toHaveClass('group-hover:opacity-100');
+    expect(actionsContainer).toHaveClass('opacity-100');
+    expect(actionsContainer).toHaveClass('sm:opacity-0');
+    expect(actionsContainer).toHaveClass('sm:group-hover:opacity-100');
   });
 });

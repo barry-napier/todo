@@ -4,6 +4,7 @@ import { useState, FormEvent, KeyboardEvent } from 'react';
 import { Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface AddTodoProps {
   onAdd: (text: string) => void;
@@ -54,8 +55,8 @@ export function AddTodo({ onAdd }: AddTodoProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2">
-      <div className="flex gap-2">
+    <form onSubmit={handleSubmit} className="space-y-2 mb-6">
+      <div className="flex flex-col sm:flex-row gap-2">
         <Input
           id="add-todo-input"
           type="text"
@@ -63,7 +64,14 @@ export function AddTodo({ onAdd }: AddTodoProps) {
           value={text}
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={handleKeyDown}
-          className={error ? 'border-red-500' : ''}
+          className={cn(
+            'flex-1',
+            // Larger touch targets on mobile
+            'h-12 sm:h-10',
+            'text-base sm:text-sm',
+            'px-4',
+            error && 'border-red-500'
+          )}
           maxLength={500}
           autoFocus
           aria-label="New todo input"
@@ -72,11 +80,16 @@ export function AddTodo({ onAdd }: AddTodoProps) {
         />
         <Button
           type="submit"
-          size="icon"
           aria-label="Add todo"
-          className="min-w-[44px] min-h-[44px]"
+          className={cn(
+            // Responsive sizing
+            'h-12 sm:h-10',
+            'min-w-[120px] sm:min-w-[44px]',
+            'px-4 sm:px-3'
+          )}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-5 w-5 sm:h-4 sm:w-4" />
+          <span className="ml-2 sm:hidden">Add Todo</span>
         </Button>
       </div>
       {error && (

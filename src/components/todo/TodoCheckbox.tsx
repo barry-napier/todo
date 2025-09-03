@@ -23,7 +23,9 @@ const TodoCheckbox = forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>,
         onCheckedChange={onCheckedChange}
         aria-label={`Mark "${todoText}" as ${checked ? 'incomplete' : 'complete'}`}
         className={cn(
-          'peer h-5 w-5 shrink-0 rounded-md border-2 border-primary',
+          'peer shrink-0 rounded-md border-2 border-primary',
+          // Responsive sizing - larger on mobile for better touch targets
+          'h-6 w-6 sm:h-5 sm:w-5',
           'ring-offset-background transition-all duration-200',
           'focus-visible:outline-none focus-visible:ring-2',
           'focus-visible:ring-ring focus-visible:ring-offset-2',
@@ -44,7 +46,7 @@ const TodoCheckbox = forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>,
             'data-[state=checked]:fade-in-0 data-[state=unchecked]:fade-out-0'
           )}
         >
-          <Check className="h-3.5 w-3.5 stroke-[3]" />
+          <Check className="h-4 w-4 sm:h-3.5 sm:w-3.5 stroke-[3]" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
     );

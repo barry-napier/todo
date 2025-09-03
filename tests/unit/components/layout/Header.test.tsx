@@ -18,7 +18,7 @@ describe('Header', () => {
   it('should be responsive with different text sizes', () => {
     const { container } = render(<Header />);
     const title = container.querySelector('h1');
-    expect(title).toHaveClass('text-xl', 'sm:text-2xl');
+    expect(title).toHaveClass('text-lg', 'sm:text-xl', 'md:text-2xl');
   });
 
   it('should have proper z-index for layering', () => {
