@@ -31,11 +31,23 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
 
   const handleSave = () => {
     const trimmedText = editText.trim();
-    if (trimmedText && trimmedText !== todo.text) {
-      onUpdate(todo.id, { text: trimmedText });
-    } else {
-      setEditText(todo.text);
+
+    // Validation: prevent empty text and check max length
+    if (!trimmedText) {
+      setEditText(todo.text); // Restore original text
+      setIsEditing(false);
+      return;
     }
+
+    if (trimmedText.length > 500) {
+      setEditText(trimmedText.substring(0, 500)); // Truncate to max length
+      return;
+    }
+
+    if (trimmedText !== todo.text) {
+      onUpdate(todo.id, { text: trimmedText });
+    }
+
     setIsEditing(false);
   };
 
@@ -110,15 +122,15 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
           </div>
         ) : (
           <>
-            <label
-              htmlFor={`todo-${todo.id}`}
+            <span
+              onClick={() => setIsEditing(true)}
               className={cn(
                 'flex-1 cursor-pointer transition-all duration-200',
                 todo.completed && 'line-through text-muted-foreground decoration-2'
               )}
             >
               {todo.text}
-            </label>
+            </span>
             <div className="flex gap-1">
               <Button
                 size="icon"
